@@ -72,7 +72,7 @@ class AbsensiController extends Controller
             );
 
             return view('admin.absensi.index', compact(['absensi', 'tanggal', 'date', 'tanggal2', 'tanggalCetak', 'dbName']));
-        }       
+        }
     }
 
     function syncData(Request $request){
@@ -85,8 +85,8 @@ class AbsensiController extends Controller
         $zk = new ZKLibrary($mesin->tcpip, $port);
         $zk->connect();
         $log_kehadiran = $zk->getAttendance();
-        
-        
+
+
         if(!empty($log_kehadiran) == true){
             foreach($log_kehadiran as $data){
                 $countData = count($log_kehadiran) - 1;

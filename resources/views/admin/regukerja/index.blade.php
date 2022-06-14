@@ -48,47 +48,47 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <table id="example2" class="table table-bordered table-striped dataTable dtr-inline collapsed">
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Tanggal Start</th>
-                        <th>Hari</th>
-                        <th>Jadwal</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                            $no = 1;
-                        ?>
-                        @foreach($reguKerja as $data)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $data->kode }}</td>
-                            <td>{{ $data->nama }}</td>
-                            <td>{{ date('d F Y' ,strtotime($data->tgl_start)) }}</td>
-                            <td>{{ $data->hari }}</td>
-                            <td>{{ $data->jadwal }}</td>
-                            <td>
-                                <a href="{{ route('editReguKerja', $data->id) }}" class="btn btn-sm btn-warning">Ubah</a>
-                                <button class="btn btn-sm btn-danger" id="btn-delete" onclick="destroy('{{$data->id}}')">Hapus</button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>No</th>
-                            <th>Kode</th>
-                            <th>Nama</th>
-                            <th>Tanggal Start</th>
-                            <th>Hari</th>
-                            <th>Jadwal</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Tanggal Start</th>
+                                <th>Hari</th>
+                                <th>Jadwal</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                $no = 1;
+                            ?>
+                            @foreach($reguKerja as $data)
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $data->kode }}</td>
+                                <td>{{ $data->nama }}</td>
+                                <td>{{ date('d F Y' ,strtotime($data->tgl_start)) }}</td>
+                                <td>{{ $data->hari }}</td>
+                                <td>{{ $data->jadwal }}</td>
+                                <td>
+                                    <a href="{{ route('editReguKerja', $data->id) }}" class="btn btn-sm btn-warning">Ubah</a>
+                                    <button class="btn btn-sm btn-danger" id="btn-delete" onclick="destroy('{{$data->id}}')">Hapus</button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Tanggal Start</th>
+                                <th>Hari</th>
+                                <th>Jadwal</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <!-- /.card-body -->

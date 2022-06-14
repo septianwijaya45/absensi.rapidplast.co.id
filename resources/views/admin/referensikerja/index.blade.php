@@ -48,47 +48,10 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <table id="example2" class="table table-bordered table-striped dataTable dtr-inline collapsed">
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Work In</th>
-                        <th>Rest Out</th>
-                        <th>Rest In</th>
-                        <th>Work Out</th>
-                        <th>Total Jam</th>
-                        <th>Range Rest Out</th>
-                        <th>Range Rest In</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                            $no = 1;
-                        ?>
-                        @foreach($referensiKerja as $data)
-                        <tr>
-                            <td>{{ $no++ }}</td>
-                            <td>{{ $data->kode }}</td>
-                            <td>{{ $data->nama }}</td>
-                            <td>{{ $data->workin }}</td>
-                            <td>{{ $data->restout }}</td>
-                            <td>{{ $data->restin }}</td>
-                            <td>{{ $data->workout }}</td>
-                            <td>{{ $data->total_jam }}</td>
-                            <td>{{ $data->rangerestout }}</td>
-                            <td>{{ $data->rangerestin }}</td>
-                            <td>
-                                <a href="{{ route('editReferensiKerja', $data->id) }}" class="btn btn-sm btn-warning">Ubah</a>
-                                <button class="btn btn-sm btn-danger" id="btn-delete" onclick="destroy('{{$data->id}}')">Hapus</button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
+                        <thead>
                         <tr>
                             <th>No</th>
+                            <th>Kode</th>
                             <th>Nama</th>
                             <th>Work In</th>
                             <th>Rest Out</th>
@@ -99,7 +62,45 @@
                             <th>Range Rest In</th>
                             <th>Action</th>
                         </tr>
-                    </tfoot>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                $no = 1;
+                            ?>
+                            @foreach($referensiKerja as $data)
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $data->kode }}</td>
+                                <td>{{ $data->nama }}</td>
+                                <td>{{ $data->workin }}</td>
+                                <td>{{ $data->restout }}</td>
+                                <td>{{ $data->restin }}</td>
+                                <td>{{ $data->workout }}</td>
+                                <td>{{ $data->total_jam }}</td>
+                                <td>{{ $data->rangerestout }}</td>
+                                <td>{{ $data->rangerestin }}</td>
+                                <td>
+                                    <a href="{{ route('editReferensiKerja', $data->id) }}" class="btn btn-sm btn-warning">Ubah</a>
+                                    <button class="btn btn-sm btn-danger" id="btn-delete" onclick="destroy('{{$data->id}}')">Hapus</button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Work In</th>
+                                <th>Rest Out</th>
+                                <th>Rest In</th>
+                                <th>Work Out</th>
+                                <th>Total Jam</th>
+                                <th>Range Rest Out</th>
+                                <th>Range Rest In</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <!-- /.card-body -->
