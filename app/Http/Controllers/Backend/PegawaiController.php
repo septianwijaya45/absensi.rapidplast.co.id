@@ -20,9 +20,8 @@ class PegawaiController extends Controller
 {
     function index(){
         $pegawai = DB::select("
-            SELECT p.id, p.pid, p.nama, p.no_ktp, p.alamat, p.sap, u.email, p.departement_id
-            FROM pegawais p, users u
-            WHERE p.user_id = u.id
+            SELECT p.id, p.pid, p.nama, p.no_ktp, p.alamat, p.sap, p.email, p.departement_id
+            FROM pegawais p
         ");
 
         return view('admin.pegawai.index', compact(['pegawai']));
@@ -124,7 +123,7 @@ class PegawaiController extends Controller
         ]);
 
         Session::put('sweetalert', 'success');
-        return redirect()->route('editPegawai', $id)->with('alert', 'Sukses Mengedit '.$pegawai->nama);
+        return redirect()->route('editPegawai', $id)->with('alert', 'Sukses Mengubah '.$pegawai->nama);
     }
 
     function destroy($id){
@@ -169,6 +168,6 @@ class PegawaiController extends Controller
             }
         }
         Session::put('sweetalert', 'success');
-        return redirect()->back()->with('alert', 'Sukses Menambahkan pegawai dari mesin fingerprint'.$mesin->ip);
+        return redirect()->back()->with('alert', 'Sukses Menambahkan pegawai dari mesin fingerprint '.$mesin->ip);
     }
 }

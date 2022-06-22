@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
             // RoleSeeder::class,
             // UserSeeder::class,
             // JabatanSeeder::class,
-            PegawaiSeeder::class,
-            // MesinSeeder::class
+            // PegawaiSeeder::class,
+            MesinSeeder::class
         ]);
     }
 }

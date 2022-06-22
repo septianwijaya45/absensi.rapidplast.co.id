@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\HariLiburController;
 use App\Http\Controllers\Backend\MesinController;
 use App\Http\Controllers\Backend\ReferensiKerjaController;
 use App\Http\Controllers\Backend\ReguKerjaController;
+use App\Http\Controllers\Backend\ProfileController;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Schema;
 
@@ -169,6 +170,14 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             Route::post('/Tambah-Data', [HariLiburController::class, 'store'])->name('storeHariLibur');
             // Action Data
             Route::post('/Action', [HariLiburController::class, 'action'])->name('actionHariLibur');
+        });
+        // ========== Hari Libur Route ========== //
+
+        // ========== Hari Libur Route ========== //
+        Route::group(['prefix' => 'Profil-Saya'], function(){
+            Route::get('/{id}', [ProfileController::class, 'index'])->name('profil');
+            // Edit Data
+            Route::post('/Edit-Data/{id}', [ProfileController::class, 'edit'])->name('profilEdit');
         });
         // ========== Hari Libur Route ========== //
     });

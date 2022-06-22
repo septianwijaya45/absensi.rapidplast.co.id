@@ -48,7 +48,7 @@ class MesinController extends Controller
         ]);
 
         Session::put('sweetalert', 'success');
-        return redirect()->route('mesin')->with('alert', 'Sukses Menambahkan Data');
+        return redirect()->route('mesin')->with('alert', 'Sukses Menambahkan Data!');
     }
 
     function defaultMesin($id){
@@ -104,7 +104,7 @@ class MesinController extends Controller
         ]);
 
         Session::put('sweetalert', 'success');
-        return redirect()->route('mesin')->with('alert', 'Sukses Update Data');
+        return redirect()->route('mesin')->with('alert', 'Sukses Mengubah Data!');
     }
 
     function destroy($id){

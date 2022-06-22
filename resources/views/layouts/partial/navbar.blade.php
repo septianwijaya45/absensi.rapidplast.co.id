@@ -11,12 +11,12 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
             <div class="image">
-                <img src="{{asset('backend/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image" width=30>
+                <img src="{{asset('backend/file/images/rapidplast.ico')}}" class="img-circle elevation-2" alt="User Image" width=30>
             </div>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
+          <a href="{{ route('profil', Auth()->user()->id) }}" class="dropdown-item">
             <i class="fas fa-envelope mr-2"></i> Profile
           </a>
           <div class="dropdown-divider"></div>

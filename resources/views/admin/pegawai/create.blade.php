@@ -32,7 +32,7 @@
                     <div class="card-body">
                     <div class="form-group">
                         <label for="nama">Nama Pegawai</label>
-                        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" id="nama" placeholder="Ketik Email"  value="{{ old('nama') }}">
+                        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" id="nama" placeholder="Ketik Nama"  value="{{ old('nama') }}">
 
                         @error('nama')
                             <div class="invalid-feedback">

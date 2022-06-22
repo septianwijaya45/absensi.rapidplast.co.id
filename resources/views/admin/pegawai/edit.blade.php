@@ -44,7 +44,7 @@
                     <div class="card-body">
                     <div class="form-group">
                         <label for="nama">Nama Pegawai</label>
-                        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" id="nama" placeholder="Ketik Email"  value="{{ $pegawai->nama }}">
+                        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" id="nama" placeholder="Ketik Nama"  value="{{ $pegawai->nama }}">
 
                         @error('nama')
                             <div class="invalid-feedback">
@@ -166,7 +166,7 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
                 </div>

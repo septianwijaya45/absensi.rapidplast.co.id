@@ -47,7 +47,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <table id="example2" class="table table-bordered table-striped dataTable dtr-inline collapsed">
+                    <table id="example11" class="table table-bordered table-striped dataTable dtr-inline collapsed">
                         <thead>
                         <tr>
                             <th>No</th>

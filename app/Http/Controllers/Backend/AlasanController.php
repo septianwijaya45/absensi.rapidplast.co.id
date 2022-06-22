@@ -35,7 +35,7 @@ class AlasanController extends Controller
         
         if($validate->fails()){
             Session::put('sweetalert', 'warning');
-            return redirect()->back()->with('alert', 'Gagal Menambahkan Divisi!')->withErrors($validate);
+            return redirect()->back()->with('alert', 'Gagal Menambahkan Alasan!')->withErrors($validate);
         }
 
         Alasan::insert([
@@ -72,7 +72,7 @@ class AlasanController extends Controller
         
         if($validate->fails()){
             Session::put('sweetalert', 'warning');
-            return redirect()->back()->with('alert', 'Gagal Menambahkan Alasan!')->withErrors($validate);
+            return redirect()->back()->with('alert', 'Gagal Mengubah Alasan!')->withErrors($validate);
         }
 
         Alasan::where('id', $id)->update([
@@ -85,7 +85,7 @@ class AlasanController extends Controller
         ]);
 
         Session::put('sweetalert', 'success');
-        return redirect()->back()->with('alert', 'Sukses Menambahkan Data');
+        return redirect()->back()->with('alert', 'Sukses Mengubah Data');
     }
 
     function destroy($id){

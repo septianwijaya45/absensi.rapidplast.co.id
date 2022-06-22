@@ -17,11 +17,11 @@ class CreatePegawaisTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('jabatan_id');
-            $table->unsignedBigInteger('departement_id');
-            $table->unsignedBigInteger('divisi_id');
-            $table->unsignedBigInteger('referensikerja_id');
+            $table->string('departement_id', 32);
+            $table->string('divisi_id', 32);
+            $table->string('regukerja_id', 32);
             $table->integer('pid');
-            $table->bigInteger('sap');
+            $table->bigInteger('sap')->nullable();
             $table->string('nama');
             $table->string('no_ktp')->nullable();
             $table->text('alamat')->nullable();
@@ -29,9 +29,6 @@ class CreatePegawaisTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('jabatan_id')->references('id')->on('jabatans')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('departement_id')->references('id')->on('departements')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('divisi_id')->references('id')->on('divisies')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('referensikerja_id')->references('id')->on('referensikerjas')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

@@ -41,11 +41,11 @@
                         @csrf
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <span>Dari Tanggal</span>
                                     <input type="date" id="tanggal" name="tanggal" class="form-control" value="{{$tanggalCetak}}" required>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <span>Ke Tanggal</span>
                                     @if(Route::is('searchAbsensi'))
                                     <input type="date" id="tanggal2" name="tanggal2" class="form-control" value="{{ $tanggal2}}" required>
@@ -53,7 +53,12 @@
                                     <input type="date" id="tanggal2" name="tanggal2" class="form-control" value="{{$tanggalCetak}}" required>
                                     @endif
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 text-center">
+                                    <button type="button" id="sync-absensi" class="btn btn-warning mt-4">
+                                        Sync Absensi
+                                    </button>
+                                </div>
+                                <div class="col-md-2 text-center">
                                     <button type="submit" class="btn btn-success mt-4">Cari Data</button>
                                 </div>
                             </div>
@@ -64,10 +69,7 @@
             <div class="col-md-12">
                 <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Data Absensi Tertanggal {{$tanggal}}</h3>
-                    <button type="button" class="btn btn-success btn-sm float-right" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Sync Absensi
-                    </button>
+                    <h3 class="card-title">Data Absensi</h3>
                     @if(Route::is('searchAbsensi'))
                         <a href="{{route('cetakSearch.CSV', ['tanggal' => $tanggal, 'tanggal2' => $tanggal2, 'dbName' => $dbName])}}">
                             <button type="button" class="btn btn-warning btn-sm float-right mr-2" >
@@ -188,3 +190,33 @@
 </div>
 @stop
 
+@section('footer')
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#sync-absensi').click(function(e){
+            e.preventDefault();
+
+            let tanggal = $('#tanggal').val();
+            let tanggal2 = $('#tanggal2').val();
+
+            $.ajaxSetup({
+                headers : {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            })
+
+            $.ajax({
+                url     : "{{url('Admin/Absensi/Data-Synchronous-Absensi')}}",
+                method  : "POST",
+                data    : {tanggal:tanggal, tanggal2:tanggal2},
+                success : function(success){
+                    swal("Sukses!", "Berhasil Sync Data Absensi!", "success");
+                },
+                error : function(error){
+                    swal("Gagal!", "Gagal Sync Data Absensi!\n Periksa Jaringan Anda!", "error");
+                }
+            });
+        })
+    })
+</script>
+@stop

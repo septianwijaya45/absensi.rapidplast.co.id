@@ -15,7 +15,6 @@ class CreateRegukerjasTable extends Migration
     {
         Schema::create('regukerjas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('referensikerja_id');
             $table->unsignedBigInteger('jadwal_id');
             $table->string('kode');
             $table->string('nama');
@@ -23,7 +22,6 @@ class CreateRegukerjasTable extends Migration
             $table->bigInteger('hari');
             $table->timestamps();
 
-            $table->foreign('referensikerja_id')->references('id')->on('referensikerjas')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('jadwal_id')->references('id')->on('jadwals')->onUpdate('cascade')->onDelete('cascade');
         });
     }

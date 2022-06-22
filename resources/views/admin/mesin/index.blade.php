@@ -126,7 +126,7 @@
                         url: "{{url('Admin/Mesin/Default')}}/"+id,
                         method: 'GET',
                         success: function (results) {
-                            swal("Berhasil!", "Mesin Berhasil Default!", "success");
+                            swal("Berhasil!", "Mesin Berhasil Dihapus!", "success");
                             setInterval(() => {
                                 window.location.reload();
                             }, 2000);
