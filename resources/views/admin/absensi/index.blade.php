@@ -211,6 +211,9 @@
                 data    : {tanggal:tanggal, tanggal2:tanggal2},
                 success : function(success){
                     swal("Sukses!", "Berhasil Sync Data Absensi!", "success");
+                    setInterval(() => {
+                        window.location.reload();
+                    }, 2000);
                 },
                 error : function(error){
                     swal("Gagal!", "Gagal Sync Data Absensi!\n Periksa Jaringan Anda!", "error");

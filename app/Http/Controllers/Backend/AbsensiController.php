@@ -120,168 +120,205 @@ class AbsensiController extends Controller
 
             if(!is_null($absenMentah)){
                 foreach($absenMentah as $row){
-                    $pegawai = Pegawai::where('pid', $row->pid)->first();
                     // $checkPegawai = DB::connection('mysql2')->table($dbName)->where([
                     //     ['pid', $row->pid],
                     //     [DB::raw('DATE(sync_date)'), ''.date('Y-m-d', strtotime($row->date).'')]
                     // ])->get();
 
                     $checkDate = date('Y-m-d', strtotime($row->date));
-                    $checkPegawai = DB::select("
-                        SELECT db.* 
-                        FROM absensi_frhistory.$dbName db
-                        WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
-                    ");
+
+                    if(strtotime($tanggal) === strtotime($tanggal2)){
+                        $checkPegawai = DB::select("
+                            SELECT db.* 
+                            FROM absensi_frhistory.$dbName db
+                            WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
+                        ");
+                    }else{
+                        $checkPegawai = DB::select("
+                            SELECT db.* 
+                            FROM absensi_frhistory.$dbName db
+                            WHERE db.pid = '$row->pid' AND DATE(db.sync_date) BETWEEN '$tanggal' AND '$tanggal2'
+                        ");
+                    }
+
 
                     if($checkPegawai === null || empty($checkPegawai)){
-                        // Check regukerja_id is not null
-                        if(!empty($pegawai->regukerja_id) || !is_null($pegawai->regukerja_id)){
-                            $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
+                        $pegawai = Pegawai::where('pid', $row->pid)->first();
+                        if(!is_null($pegawai)){
+                            // Check regukerja_id is not null
+                            if(!empty($pegawai->regukerja_id) || $pegawai->regukerja_id != 'null' || $pegawai->regukerja_id != null){
     
-                            // Range date start and date request in machine
-                            $tglStart = strtotime($reguKerja->tgl_start);
-                            $tglReq = strtotime($row->date);
-                            $range = $tglReq - $tglStart;
-                            $range = $range / 60 /60 /24;
-                            $hari  = $range%$reguKerja->hari;
-    
-                            // Get Jadwals
-                            $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
-                            // Get Ref Kerja
-                            $refKerja = ReferensiKerja::where('kode', $jadwal[$hari])->first();
-                            // Get Time in row
-                            $clock = date('H:i:s', strtotime($row->date));
-                            // Get Time - 1 hour before workin
-                            $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
-                            $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
-                            // dd($clock >= $refKerja->workout && $clock >= $workOutBefore);
-                            if($clock <= $refKerja->workout && $clock >= $workInBefore){
-                                if($clock >= $refKerja->workin){                                // When Late Work in
-                                    $timeLate = strtotime($clock) - strtotime($refKerja->workin);
-                                    $late = date('H:i:s', $timeLate);
-                                    DB::connection('mysql2')->table($dbName)->insert([
-                                        'pid'       => $row->pid,
-                                        'sap'       => $pegawai->sap,
-                                        'check_in'  => $clock,
-                                        'telat'     => $late,
-                                        'sync_date'=>   $row->date,
-                                        'updated_at'=> Carbon::now()
-                                    ]);
-                                }else{                                                          // When Not Late
-                                    DB::connection('mysql2')->table($dbName)->insert([
-                                        'pid'       => $row->pid,
-                                        'sap'       => $pegawai->sap,
-                                        'check_in'  => $clock,
-                                        'telat'     => '00:00:00',
-                                        'sync_date'=>   $row->date,
-                                        'updated_at'=> Carbon::now()
-                                    ]);
+                                $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
+                                if($reguKerja != null){
+                                    // Range date start and date request in machine
+                                    // $tglStart = strtotime($reguKerja->tgl_start);
+                                    // $tglReq = strtotime($row->date);
+                                    // $range = $tglReq - $tglStart;
+                                    // $range = $range / 60 /60 /24;
+                                    // $hari  = $range%$reguKerja->hari;
+
+                                    $awal  = date_create($reguKerja->tgl_start);
+                                    $akhir = date_create($row->date); // waktu sekarang
+                                    $diff  = date_diff( $awal, $akhir );
+                                    $hari = $diff->days % $reguKerja->hari;
+                                    if($hari === 0){
+                                        $hari = $reguKerja->hari;
+                                    }
+            
+                                    // Get Jadwals
+                                    $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
+                                    // Get Ref Kerja
+                                    $refKerja = ReferensiKerja::where('kode', $jadwal[$hari])->first();
+                                    // Get Time in row
+                                    $clock = date('H:i:s', strtotime($row->date));
+                                    // Get Time - 1 hour before workin
+                                    $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
+                                    $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
+                                    // dd($clock >= $refKerja->workout && $clock >= $workOutBefore);
+                                    if($clock <= $refKerja->workout && $clock >= $workInBefore){
+                                        if($clock >= $refKerja->workin){                                // When Late Work in
+                                            $timeLate = strtotime($clock) - strtotime($refKerja->workin);
+                                            $late = date('H:i:s', $timeLate);
+                                            DB::connection('mysql2')->table($dbName)->insert([
+                                                'pid'       => $row->pid,
+                                                'sap'       => $pegawai->sap,
+                                                'check_in'  => $clock,
+                                                'telat'     => $late,
+                                                'sync_date'=>   $row->date,
+                                                'updated_at'=> Carbon::now()
+                                            ]);
+                                        }else{                                                          // When Not Late
+                                            DB::connection('mysql2')->table($dbName)->insert([
+                                                'pid'       => $row->pid,
+                                                'sap'       => $pegawai->sap,
+                                                'check_in'  => $clock,
+                                                'telat'     => '00:00:00',
+                                                'sync_date'=>   $row->date,
+                                                'updated_at'=> Carbon::now()
+                                            ]);
+                                        }
+                                    }elseif($clock >= $refKerja->workout && $clock >= $workOutBefore){
+                                        DB::connection('mysql2')->table($dbName)->insert([ 
+                                            'pid'       => $row->pid,
+                                            'sap'       => $pegawai->sap,
+                                            'check_out'  => $clock,
+                                            'telat'     => '00:00:00',
+                                            'sync_date'=>   $row->date,
+                                            'updated_at'=> Carbon::now()
+                                        ]);
+                                    }
                                 }
-                            }elseif($clock >= $refKerja->workout && $clock >= $workOutBefore){
-                                DB::connection('mysql2')->table($dbName)->insert([ 
-                                    'pid'       => $row->pid,
-                                    'sap'       => $pegawai->sap,
-                                    'check_out'  => $clock,
-                                    'telat'     => '00:00:00',
-                                    'sync_date'=>   $row->date,
-                                    'updated_at'=> Carbon::now()
-                                ]);
+        
                             }
                         }
-                    }else{
-                        if($pegawai->regukerja_id){
-                            $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
-                            
-                            // Range date start and date request in machine
-                            $tglStart = strtotime($reguKerja->tgl_start);
-                            $tglReq = strtotime($row->date);
-                            $range = $tglReq - $tglStart;
-                            $range = $range / 60 /60 /24;
-                            $hari  = $range%$reguKerja->hari;
-    
-                            // Get Jadwals
-                            $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
-                            // Get Ref Kerja
-                            $refKerja = ReferensiKerja::where('kode', $jadwal[$hari])->first();
-                            // Get Time in row
-                            $clock = date('H:i:s', strtotime($row->date));
-                            // Get Time - 1 hour before workin
-                            $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
-                            $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
-                            $checkAbsen = DB::connection('mysql2')->table($dbName)->where([
-                                ['pid', $row->pid],
-                                [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
-                            ])->first();
 
-                            if(!empty($checkAbsen->check_in) && $clock >= $refKerja->workout && $clock >= $workOutBefore){
-                                DB::connection('mysql2')->table($dbName)->where([
+                    }else{
+                        $pegawai = Pegawai::where('pid', $row->pid)->first();
+
+                        if(!is_null($pegawai)){
+                            if(!empty($pegawai->regukerja_id) || $pegawai->regukerja_id != 'null' || $pegawai->regukerja_id != null){
+                                $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
+                                
+                                // Range date start and date request in machine
+                                $tglStart = strtotime($reguKerja->tgl_start);
+                                $tglReq = strtotime($row->date);
+                                $range = $tglReq - $tglStart;
+                                $range = $range / 60 /60 /24;
+                                $hari  = $range%$reguKerja->hari;
+                                if($hari === 0){
+                                    $hari = $reguKerja->hari;
+                                }
+        
+                                // Get Jadwals
+                                $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
+                                // Get Ref Kerja
+                                $refKerja = ReferensiKerja::where('kode', $jadwal[$hari])->first();
+                                // Get Time in row
+                                $clock = date('H:i:s', strtotime($row->date));
+                                // Get Time - 1 hour before workin
+                                $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
+                                $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
+                                $checkAbsen = DB::connection('mysql2')->table($dbName)->where([
                                     ['pid', $row->pid],
                                     [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
-                                ])->update([
-                                    'check_out'  => $clock,
-                                    'sync_date'=>   $row->date,
-                                    'updated_at'=> Carbon::now()
-                                ]);
-                            }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out)){
-                                DB::connection('mysql2')->table($dbName)->where([
-                                    ['pid', $row->pid],
-                                    [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
-                                ])->update([
-                                    'check_in1'  => $clock,
-                                    'sync_date'=>   $row->date,
-                                    'updated_at'=> Carbon::now()
-                                ]);
-                            }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && !empty($checkAbsen->check_in1) && $clock >= $refKerja->workout && $clock >= $workOutBefore){
-                                DB::connection('mysql2')->table($dbName)->where([
-                                    ['pid', $row->pid],
-                                    [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
-                                ])->update([
-                                    'check_out1'  => $clock,
-                                    'sync_date'=>   $row->date,
-                                    'updated_at'=> Carbon::now()
-                                ]);
-                            }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && !empty($checkAbsen->check_in1) && !empty($checkAbsen->check_out1)){
-                                DB::connection('mysql2')->table($dbName)->where([
-                                    ['pid', $row->pid],
-                                    [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
-                                ])->update([
-                                    'check_in2'  => $clock,
-                                    'sync_date'=>   $row->date,
-                                    'updated_at'=> Carbon::now()
-                                ]);
-                            }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && !empty($checkAbsen->check_in1) && !empty($checkAbsen->check_out1) && !empty($checkAbsen->check_in2) && $clock >= $refKerja->workout && $clock >= $workOutBefore){
-                                DB::connection('mysql2')->table($dbName)->where([
-                                    ['pid', $row->pid],
-                                    [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
-                                ])->update([
-                                    'check_out2'  => $clock,
-                                    'sync_date'=>   $row->date,
-                                    'updated_at'=> Carbon::now()
-                                ]);
-                            }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && !empty($checkAbsen->check_in1) && !empty($checkAbsen->check_out1) && !empty($checkAbsen->check_in2) && !empty($checkAbsen->check_out2)){
-                                DB::connection('mysql2')->table($dbName)->where([
-                                    ['pid', $row->pid],
-                                    [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
-                                ])->update([
-                                    'check_in3'  => $clock,
-                                    'sync_date'=>   $row->date,
-                                    'updated_at'=> Carbon::now()
-                                ]);
-                            }else{
-                                if($clock >= $refKerja->workout && $clock >= $workOutBefore){
+                                ])->first();
+    
+                                if(!empty($checkAbsen->check_in) && $clock >= $refKerja->workout && $clock >= $workOutBefore){
                                     DB::connection('mysql2')->table($dbName)->where([
                                         ['pid', $row->pid],
                                         [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
                                     ])->update([
-                                        'check_out3'  => $clock,
+                                        'check_out'  => $clock,
                                         'sync_date'=>   $row->date,
                                         'updated_at'=> Carbon::now()
                                     ]);
+                                }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out)){
+                                    DB::connection('mysql2')->table($dbName)->where([
+                                        ['pid', $row->pid],
+                                        [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
+                                    ])->update([
+                                        'check_in1'  => $clock,
+                                        'sync_date'=>   $row->date,
+                                        'updated_at'=> Carbon::now()
+                                    ]);
+                                }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && !empty($checkAbsen->check_in1) && $clock >= $refKerja->workout && $clock >= $workOutBefore){
+                                    DB::connection('mysql2')->table($dbName)->where([
+                                        ['pid', $row->pid],
+                                        [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
+                                    ])->update([
+                                        'check_out1'  => $clock,
+                                        'sync_date'=>   $row->date,
+                                        'updated_at'=> Carbon::now()
+                                    ]);
+                                }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && !empty($checkAbsen->check_in1) && !empty($checkAbsen->check_out1)){
+                                    DB::connection('mysql2')->table($dbName)->where([
+                                        ['pid', $row->pid],
+                                        [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
+                                    ])->update([
+                                        'check_in2'  => $clock,
+                                        'sync_date'=>   $row->date,
+                                        'updated_at'=> Carbon::now()
+                                    ]);
+                                }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && !empty($checkAbsen->check_in1) && !empty($checkAbsen->check_out1) && !empty($checkAbsen->check_in2) && $clock >= $refKerja->workout && $clock >= $workOutBefore){
+                                    DB::connection('mysql2')->table($dbName)->where([
+                                        ['pid', $row->pid],
+                                        [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
+                                    ])->update([
+                                        'check_out2'  => $clock,
+                                        'sync_date'=>   $row->date,
+                                        'updated_at'=> Carbon::now()
+                                    ]);
+                                }elseif(!empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && !empty($checkAbsen->check_in1) && !empty($checkAbsen->check_out1) && !empty($checkAbsen->check_in2) && !empty($checkAbsen->check_out2)){
+                                    DB::connection('mysql2')->table($dbName)->where([
+                                        ['pid', $row->pid],
+                                        [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
+                                    ])->update([
+                                        'check_in3'  => $clock,
+                                        'sync_date'=>   $row->date,
+                                        'updated_at'=> Carbon::now()
+                                    ]);
+                                }else{
+                                    if($clock >= $refKerja->workout && $clock >= $workOutBefore){
+                                        DB::connection('mysql2')->table($dbName)->where([
+                                            ['pid', $row->pid],
+                                            [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
+                                        ])->update([
+                                            'check_out3'  => $clock,
+                                            'sync_date'=>   $row->date,
+                                            'updated_at'=> Carbon::now()
+                                        ]);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            }
+
+            if(strtotime($tanggal) === strtotime($tanggal2)){
+                $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->delete();
+            }else{
+                $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->delete();
             }
 
 

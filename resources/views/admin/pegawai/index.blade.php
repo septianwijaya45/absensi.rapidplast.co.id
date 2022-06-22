@@ -58,7 +58,7 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th>KTP</th>
-                        <th>Dept</th>
+                        <th>Regu</th>
                         <th>SAP</th>
                         <th>Alamat</th>
                         <th>Action</th>
@@ -72,22 +72,13 @@ use App\Models\Departement;
                             $no = 1;
                         ?>
                         @foreach($pegawai as $data)
-                        <?php
-                            if(!empty($data->departement_id)){
-                                $departement = Departement::where('id', $data->departement_id)->value('kode');
-                            }
-                        ?>
                         <tr>
                             <td>{{$no++}}</td>
                             <td>{{$data->pid}}</td>
                             <td>{{$data->nama}}</td>
                             <td>{{$data->email}}</td>
                             <td>{{$data->no_ktp}}</td>
-                            @if(!empty($data->departement_id))
-                            <td>{{$departement}}</td>
-                            @else
-                            <td>-</td>
-                            @endif
+                            <td>{{$data->regukerja_id}}</td>
                             <td>{{$data->sap}}</td>
                             <td>{{$data->alamat}}</td>
                             <td>
@@ -106,7 +97,7 @@ use App\Models\Departement;
                             <th>Nama</th>
                             <th>Email</th>
                             <th>KTP</th>
-                            <th>Dept</th>
+                            <th>Regu</th>
                             <th>SAP</th>
                             <th>Alamat</th>
                             <th>Action</th>

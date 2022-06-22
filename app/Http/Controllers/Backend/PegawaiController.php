@@ -10,6 +10,7 @@ use App\Models\Mesin;
 use Illuminate\Http\Request;
 use App\Models\Pegawai;
 use App\Models\ReferensiKerja;
+use App\Models\ReguKerja;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class PegawaiController extends Controller
 {
     function index(){
         $pegawai = DB::select("
-            SELECT p.id, p.pid, p.nama, p.no_ktp, p.alamat, p.sap, p.email, p.departement_id
+            SELECT p.id, p.pid, p.nama, p.no_ktp, p.alamat, p.sap, p.email, p.departement_id, p.regukerja_id
             FROM pegawais p
         ");
 
@@ -83,15 +84,14 @@ class PegawaiController extends Controller
     }
 
     function edit($id){
-        $pegawai = Pegawai::join('users', 'users.id', '=', 'pegawais.user_id')
-                   ->where('pegawais.id', $id)->first(['pegawais.*', 'users.email']);
+        $pegawai = Pegawai::where('id', $id)->first();
 
         // $pegawai = Pegawai::find($id);
         $jabatan = Jabatan::all();
         $divisi = Divisi::all();
         $departement = Departement::all();
-        $referensikerja = ReferensiKerja::all();
-        return view('admin.pegawai.edit', compact(['pegawai', 'id', 'jabatan', 'divisi', 'departement', 'referensikerja']));
+        $reguKerja = ReguKerja::all();
+        return view('admin.pegawai.edit', compact(['pegawai', 'id', 'jabatan', 'divisi', 'departement', 'reguKerja']));
     }
 
     function update(Request $request, $id){
