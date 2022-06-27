@@ -106,15 +106,15 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="referensikerja">Referensi Kerja</label>
-                        <select name="referensikerja" id="referensikerja" class="form-control @error('referensikerja') is-invalid @enderror">
-                            <option value="" selected disabled>===== Pilih Referensi Kerja =====</option>
-                            @foreach($referensikerja as $referkerja)
-                                <option value="{{$referkerja->id}}" @if(old('departement') == $referkerja->id) selected @endif>{{$referkerja->kode}} | {{$referkerja->nama}}</option>
+                        <label for="regukerja_id">Regu Kerja</label>
+                        <select name="regukerja_id" id="regukerja_id" class="form-control @error('regukerja_id') is-invalid @enderror">
+                            <option value="" selected disabled>===== Pilih Regu Kerja =====</option>
+                            @foreach($reguKerja as $reguKerja)
+                                <option value="{{$reguKerja->id}}" @if(old('regukerja_id') == $reguKerja->id) selected @endif>{{$reguKerja->kode}} | {{$reguKerja->nama}}</option>
                             @endforeach
                         </select>
 
-                        @error('referensikerja')
+                        @error('regukerja_id')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>

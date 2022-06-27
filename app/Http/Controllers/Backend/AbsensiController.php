@@ -55,7 +55,8 @@ class AbsensiController extends Controller
             $absensi = DB::select(
                 "SELECT afh.pid, p.nama, p.departement, afh.check_in, afh.check_out, afh.telat, afh.izin, afh.check_in1, afh.check_out1, afh.check_in2, afh.check_out2, afh.check_in3, afh.check_out3
                 FROM absensi_fingerprintskripsi.pegawais p, absensi_frhistory.$dbName afh
-                WHERE p.pid = afh.pid AND DATE(afh.sync_date) = '$date'"
+                WHERE p.pid = afh.pid AND DATE(afh.sync_date) = '$date'
+                ORDER BY afh.id DESC"
             );
 
             return view('admin.absensi.index', compact(['absensi', 'tanggal', 'date', 'tanggalCetak', 'dbName']));
@@ -71,7 +72,8 @@ class AbsensiController extends Controller
             $absensi = DB::select(
                 "SELECT afh.pid, p.nama, p.departement, afh.check_in, afh.check_out, afh.telat, afh.izin, afh.check_in1, afh.check_out1, afh.check_in2, afh.check_out2, afh.check_in3, afh.check_out3
                 FROM absensi_fingerprintskripsi.pegawais p, absensi_frhistory.$dbName afh
-                WHERE p.pid = afh.pid AND DATE(sync_date) >= '$tanggal' AND DATE(sync_date) <= '$tanggal2'"
+                WHERE p.pid = afh.pid AND DATE(sync_date) >= '$tanggal' AND DATE(sync_date) <= '$tanggal2'
+                ORDER BY afh.id DESC"
             );
 
             return view('admin.absensi.index', compact(['absensi', 'tanggal', 'date', 'tanggal2', 'tanggalCetak', 'dbName']));

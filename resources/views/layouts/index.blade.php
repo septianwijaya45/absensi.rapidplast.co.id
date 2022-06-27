@@ -200,6 +200,18 @@
   $(document).ready(function() {
       $('.refKerja').select2();
   });
+  $(document).ready(function() {
+      $('#departement').select2();
+  });
+  $(document).ready(function() {
+      $('#divisi').select2();
+  });
+  $(document).ready(function() {
+      $('#regukerja_id').select2();
+  });
+  $(document).ready(function() {
+      $('#jabatan_id').select2();
+  });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

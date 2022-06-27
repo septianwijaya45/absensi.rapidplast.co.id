@@ -127,7 +127,19 @@
                         </select>
 
                         @error('regukerja_id')
+                            <div class="invalid-feedback"><label for="regukerja_id">Regu Kerja</label>
+                        <select name="regukerja_id" id="regukerja_id" class="form-control @error('regukerja_id') is-invalid @enderror">
+                            <option value="" selected disabled>===== Pilih Regu Kerja =====</option>
+                            @foreach($reguKerja as $reguKerja)
+                                <option value="{{$reguKerja->id}}" @if($pegawai->regukerja_id == $reguKerja->id) selected @endif>{{$reguKerja->kode}} | {{$reguKerja->nama}}</option>
+                            @endforeach
+                        </select>
+
+                        @error('regukerja_id')
                             <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                        @enderror
                                 {{$message}}
                             </div>
                         @enderror

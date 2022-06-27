@@ -70,9 +70,9 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             Route::get('/', [AbsensiController::class, 'index'])->name('absensi');
             // Data Synchronous Data
             Route::post('/Data-Synchronous-Absensi', [AbsensiController::class, 'syncData'])->name('syncDataAbsensi');
-            // Cetak Absensi CSV
-            Route::get('/Cetak-Absensi-CSV/{tanggal}/{dbName}', [CetakAbsenMentahController::class, 'cetakCSV'])->name('cetak.CSV');
-            Route::get('/Cetak-Absensi-CSV-Search/{tanggal}/{tanggal2}/{dbName}', [CetakAbsenMentahController::class, 'cetakCSVSearch'])->name('cetakSearch.CSV');
+            // Cetak Absensi TXT
+            Route::get('/Cetak-Absensi-TXT/{tanggal}/{dbName}', [CetakAbsenMentahController::class, 'cetakTXT'])->name('cetak.TXT');
+            Route::get('/Cetak-Absensi-TXT-Search/{tanggal}/{tanggal2}/{dbName}', [CetakAbsenMentahController::class, 'cetakTXTSearch'])->name('cetakSearch.TXT');
             // Cari Data
             Route::post('Cari-Data', [AbsensiController::class, 'index'])->name('searchAbsensi');
         });

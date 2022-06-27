@@ -21,8 +21,9 @@ class PegawaiController extends Controller
 {
     function index(){
         $pegawai = DB::select("
-            SELECT p.id, p.pid, p.nama, p.no_ktp, p.alamat, p.sap, p.email, p.departement_id, p.regukerja_id
+            SELECT p.id, p.user_id, p.pid, p.nama, p.no_ktp, p.alamat, p.sap, p.email, p.departement_id, p.regukerja_id
             FROM pegawais p
+            ORDER BY p.id ASC
         ");
 
         return view('admin.pegawai.index', compact(['pegawai']));
@@ -32,8 +33,8 @@ class PegawaiController extends Controller
         $jabatan = Jabatan::all();
         $departement = Departement::all();
         $divisi      = Divisi::all();
-        $referensikerja = ReferensiKerja::all();
-        return view('admin.pegawai.create', compact(['jabatan', 'departement', 'divisi', 'referensikerja']));
+        $reguKerja = ReguKerja::all();
+        return view('admin.pegawai.create', compact(['jabatan', 'departement', 'divisi', 'reguKerja']));
     }
 
     function store(Request $request){
@@ -71,10 +72,11 @@ class PegawaiController extends Controller
             'jabatan_id'        => $request->jabatan_id,
             'departement_id'    => $request->departement,
             'divisi_id'         => $request->divisi,
-            'referensikerja_id' => $request->referensikerja_id,
+            'regukerja_id'      => $request->regukerja_id,
             'pid'               => $request->pid,
             'nama'              => $request->nama,
             'no_ktp'            => $request->no_ktp,
+            'email'             => $request->email,
             'sap'               => $request->sap,
             'alamat'            => $request->alamat,
         ]);
@@ -113,11 +115,12 @@ class PegawaiController extends Controller
             'jabatan_id'        => $request->jabatan_id,
             'departement_id'    => $request->departement,
             'divisi_id'         => $request->divisi,
-            'referensikerja_id' => $request->referensikerja_id,
+            'regukerja_id'      => $request->regukerja_id,
             'pid'               => $request->pid,
             'nama'              => $request->nama,
             'no_ktp'            => $request->no_ktp,
             'departement'       => $request->departement,
+            'email'             => $request->email,
             'sap'               => $request->sap,
             'alamat'            => $request->alamat,
         ]);
@@ -160,6 +163,7 @@ class PegawaiController extends Controller
 
                 Pegawai::insert([
                     'user_id'       => $user->id,
+                    'jabatan_id'    => 61,
                     'pid'           => $data[0],
                     'nama'          => $data[1],
                     'created_at'    => Carbon::now(),

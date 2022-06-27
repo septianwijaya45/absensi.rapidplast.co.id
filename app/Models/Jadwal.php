@@ -10,6 +10,7 @@ class Jadwal extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         '1',
         '2',
         '3',
@@ -110,5 +111,7 @@ class Jadwal extends Model
         '98',
         '99',
         '100',
+        'created_at',
+        'updated_at'
     ];
 }

@@ -67,7 +67,7 @@
                     <tbody>
                         <?php
 
-use App\Models\Departement;
+use App\Models\User;
 
                             $no = 1;
                         ?>

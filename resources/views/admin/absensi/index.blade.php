@@ -71,13 +71,13 @@
                 <div class="card-header">
                     <h3 class="card-title">Data Absensi</h3>
                     @if(Route::is('searchAbsensi'))
-                        <a href="{{route('cetakSearch.CSV', ['tanggal' => $tanggal, 'tanggal2' => $tanggal2, 'dbName' => $dbName])}}">
+                        <a href="{{route('cetakSearch.TXT', ['tanggal' => $tanggal, 'tanggal2' => $tanggal2, 'dbName' => $dbName])}}">
                             <button type="button" class="btn btn-warning btn-sm float-right mr-2" >
                                 Cetak .TXT
                             </button>
                         </a>
                     @else
-                        <a href="{{route('cetak.CSV', ['tanggal' => $tanggalCetak, 'dbName' => $dbName])}}">
+                        <a href="{{route('cetak.TXT', ['tanggal' => $tanggal, 'dbName' => $dbName])}}">
                             <button type="button" class="btn btn-warning btn-sm float-right mr-2" >
                                 Cetak .TXT
                             </button>
