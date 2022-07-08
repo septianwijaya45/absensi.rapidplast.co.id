@@ -216,6 +216,7 @@
                     }, 2000);
                 },
                 error : function(error){
+                    console.log(error);
                     swal("Gagal!", "Gagal Sync Data Absensi!\n Periksa Jaringan Anda!", "error");
                 }
             });

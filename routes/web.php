@@ -5,15 +5,19 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\PegawaiController;
 use App\Http\Controllers\Backend\AbsensiController;
+use App\Http\Controllers\Backend\AbsensiWfhController;
 use App\Http\Controllers\Backend\AlasanController;
 use App\Http\Controllers\Backend\CetakAbsenMentahController;
+use App\Http\Controllers\Backend\CutiController;
 use App\Http\Controllers\Backend\DepartementController;
 use App\Http\Controllers\Backend\DivisiController;
 use App\Http\Controllers\Backend\HariLiburController;
+use App\Http\Controllers\Backend\LaporanAbsensiController;
 use App\Http\Controllers\Backend\MesinController;
 use App\Http\Controllers\Backend\ReferensiKerjaController;
 use App\Http\Controllers\Backend\ReguKerjaController;
 use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\WorkFromHomeController;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Schema;
 
@@ -76,6 +80,14 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             // Cari Data
             Route::post('Cari-Data', [AbsensiController::class, 'index'])->name('searchAbsensi');
         });
+
+        // =========== Laporan Absensi =========== //
+        Route::group(['prefix' => 'Laporan-Absensi'], function(){
+            Route::get('/', [LaporanAbsensiController::class, 'index'])->name('laporanAbsensi');
+            Route::post('/', [LaporanAbsensiController::class, 'index'])->name('searchAbsensiLaporan');
+            Route::post('/', [LaporanAbsensiController::class, 'cetak'])->name('cetakAbsensiLaporan');
+        });
+        // =========== Laporan Absensi =========== //
 
 
         // ========== Mesin Route ========== //
@@ -180,6 +192,35 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             Route::post('/Edit-Data/{id}', [ProfileController::class, 'edit'])->name('profilEdit');
         });
         // ========== Hari Libur Route ========== //
+        
+        // ========== Cuti Route ========== //
+        Route::group(['prefix' => 'Cuti'], function(){
+            Route::get('/', [CutiController::class, 'index'])->name('cuti');
+            Route::post('/', [CutiController::class, 'index'])->name('searchCuti');
+            // Konfirmasi Cuti
+            Route::get('/Konfirmasi-Cuti/{id}', [CutiController::class, 'konfirmasi'])->name('cutiKonfirmasi');
+            // Tolak Cuti
+            Route::get('/Tolak-Cuti/{id}', [CutiController::class, 'tolak'])->name('cutiTolak');
+        });
+        // ========== Cuti Route ========== //
+
+        // ========== Work From Home Route ========== //
+        Route::group(['prefix' => 'Work-From-Home'], function(){
+            Route::get('/', [WorkFromHomeController::class, 'index'])->name('wfh');
+            Route::post('/', [WorkFromHomeController::class, 'index'])->name('searchWfh');
+            // Konfirmasi  Work From Home
+            Route::get('/Konfirmasi-Data/{id}', [WorkFromHomeController::class, 'konfirmasi'])->name('wfhKonfirmasi');
+            // Tolak  Work From Home
+            Route::get('/Tolak-Data/{id}', [WorkFromHomeController::class, 'tolak'])->name('wfhTolak');
+        });
+        // ==========  Work From Home Route ========== //
+
+        // ========== Absensi Work From Home Route ========== //
+        Route::group(['prefix' => 'Absensi-Work-From-Home'], function(){
+            Route::get('/', [AbsensiWfhController::class, 'index'])->name('absensiWfh');
+            Route::post('/', [AbsensiWfhController::class, 'index'])->name('searchAbsensiWfh');
+        });
+        // ========== Absensi Work From Home Route ========== //
     });
 
 

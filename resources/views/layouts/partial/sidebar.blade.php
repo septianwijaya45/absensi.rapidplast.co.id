@@ -66,14 +66,14 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="{{route('alasan')}}" class="nav-link {{request()->is('Admin/Alasan') || request()->is('Admin/Alasan/*') ? 'active' : ''}}">
               <i class="nav-icon fas fa-comments"></i>
               <p>
                 Alasan
               </p>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="{{route('referensiKerja')}}" class="nav-link {{request()->is('Admin/Referensi-Kerja') || request()->is('Admin/Referensi-Kerja/*') ? 'active' : ''}}">
               <i class="nav-icon fas fa-building"></i>
@@ -94,7 +94,41 @@
             <a href="{{route('hariLibur')}}" class="nav-link {{request()->is('Admin/Hari-Libur') || request()->is('Admin/Hari-Libur/*') ? 'active' : ''}}">
               <i class="nav-icon fas fa-calendar"></i>
               <p>
-                Hari Libur
+                <!-- Hari Libur -->
+                Tanggal
+              </p>
+            </a>
+          </li>
+          <li class="nav-header">Lain-Lain</li>
+          <!-- <li class="nav-item">
+            <a href="{{route('cuti')}}" class="nav-link {{request()->is('Admin/Cuti') || request()->is('Admin/Cuti/*') ? 'active' : ''}}">
+              <i class="nav-icon fas fa-building"></i>
+              <p>
+                Cuti
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('wfh')}}" class="nav-link {{request()->is('Admin/Work-From-Home') || request()->is('Admin/Work-From-Home/*') ? 'active' : ''}}">
+              <i class="nav-icon fas fa-building"></i>
+              <p>
+                Work From Home
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('absensiWfh')}}" class="nav-link {{request()->is('Admin/Absensi-Work-From-Home') || request()->is('Admin/Absensi-Work-From-Home/*') ? 'active' : ''}}">
+              <i class="nav-icon fas fa-building"></i>
+              <p>
+                Absensi WFH
+              </p>
+            </a>
+          </li> -->
+          <li class="nav-item">
+            <a href="{{route('laporanAbsensi')}}" class="nav-link {{request()->is('Admin/Absensi-Work-From-Home') || request()->is('Admin/Absensi-Work-From-Home/*') ? 'active' : ''}}">
+              <i class="nav-icon fas fa-building"></i>
+              <p>
+                Laporan Absensi
               </p>
             </a>
           </li>

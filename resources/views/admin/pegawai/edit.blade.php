@@ -92,7 +92,7 @@
                         <select name="departement" id="departement" class="form-control @error('departement') is-invalid @enderror">
                             <option value="" selected disabled>===== Pilih Departement =====</option>
                             @foreach($departement as $depart)
-                                <option value="{{$depart->id}}" @if($pegawai->departement_id) == $depart->kode) selected @endif>{{$depart->kode}} | {{$depart->nama}}</option>
+                                <option value="{{$depart->id}}" @if($pegawai->departement_id == $depart->kode) selected @endif>{{$depart->kode}} | {{$depart->nama}}</option>
                             @endforeach
                         </select>
 
@@ -107,7 +107,7 @@
                         <select name="divisi" id="divisi" class="form-control @error('divisi') is-invalid @enderror">
                             <option value="" selected disabled>===== Pilih Divisi =====</option>
                             @foreach($divisi as $divisi)
-                                <option value="{{$divisi->id}}" @if($pegawai->divisi_id) == $divisi->kode) selected @endif>{{$divisi->kode}} | {{$divisi->nama}}</option>
+                                <option value="{{$divisi->id}}" @if($pegawai->divisi_id == $divisi->kode) selected @endif>{{$divisi->kode}} | {{$divisi->nama}}</option>
                             @endforeach
                         </select>
 
