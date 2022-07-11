@@ -7,15 +7,15 @@
   <title>Login | Absensi Rapid Plast</title>
 
   <!-- Icon Web -->
-  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('backend/file/images/rapidplast.jpg')}}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('public/backend/file/images/rapidplast.jpg')}}">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{asset('backend/plugins/fontawesome-free/css/all.min.css')}}">
+  <link rel="stylesheet" href="{{asset('public/backend/plugins/fontawesome-free/css/all.min.css')}}">
   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="{{asset('backend/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{asset('public/backend/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{asset('backend/dist/css/adminlte.min.css')}}">
+  <link rel="stylesheet" href="{{asset('public/backend/dist/css/adminlte.min.css')}}">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -27,7 +27,7 @@
     <div class="card-body login-card-body">
       <div class="login-logo">
         <a href="{{route('login')}}">
-          <img src="{{asset('backend/file/images/logo3.png')}}" width="auto" height="200" >
+          <img src="{{asset('public/backend/file/images/logo3.png')}}" width="auto" height="200" >
         </a>
       </div>
       <p class="login-box-msg">Masuk untuk mulai</p>
@@ -76,10 +76,10 @@
 <!-- /.login-box -->
 
 <!-- jQuery -->
-<script src="{{asset('backend/plugins/jquery/jquery.min.js')}}"></script>
+<script src="{{asset('public/backend/plugins/jquery/jquery.min.js')}}"></script>
 <!-- Bootstrap 4 -->
-<script src="{{asset('backend/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('public/backend/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
-<script src="{{asset('backend/dist/js/adminlte.min.js')}}"></script>
+<script src="{{asset('public/backend/dist/js/adminlte.min.js')}}"></script>
 </body>
 </html>
