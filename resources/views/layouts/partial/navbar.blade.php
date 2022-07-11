@@ -11,7 +11,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
             <div class="image">
-                <img src="{{asset('backend/file/images/rapidplast.ico')}}" class="img-circle elevation-2" alt="User Image" width=30>
+                <img src="{{asset('public/backend/file/images/rapidplast.ico')}}" class="img-circle elevation-2" alt="User Image" width=30>
             </div>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
