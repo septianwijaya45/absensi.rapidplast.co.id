@@ -7,7 +7,7 @@
   <title>{{$title ?? 'Absensi Rapid Plast'}}</title>
 
   <!-- Icon Web -->
-  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('public/backend/file/images/rapidplast.jpg')}}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('public/backend/file/images/RAPIDPLAST.jpg')}}">
    <!-- CSRF_TOKEN -->
    <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Google Font: Source Sans Pro -->
