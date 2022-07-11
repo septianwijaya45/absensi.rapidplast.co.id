@@ -7,7 +7,7 @@
   <title>Login | Absensi Rapid Plast</title>
 
   <!-- Icon Web -->
-  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('public/backend/file/images/rapidplast.jpg')}}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('public/backend/file/images/RAPIDPLAST.jpg')}}">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->

@@ -207,6 +207,18 @@
       $('#divisi').select2();
   });
   $(document).ready(function() {
+      $('#departementAwal').select2();
+  });
+  $(document).ready(function() {
+      $('#departementAkhir').select2();
+  });
+  $(document).ready(function() {
+      $('#divisiAwal').select2();
+  });
+  $(document).ready(function() {
+      $('#divisiAkhir').select2();
+  });
+  $(document).ready(function() {
       $('#regukerja_id').select2();
   });
   $(document).ready(function() {

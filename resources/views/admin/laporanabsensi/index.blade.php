@@ -83,7 +83,7 @@
                             <!-- Departement -->
                             <div class="row" id="departementView" style="display: none;">
                                 <div class="col-md-6">
-                                    <label for="departementAwal">Departement Awal</label>
+                                    <label for="departementAwal">Departement Awal</label> <br>
                                     <select name="departementAwal" id="departementAwal" class="form-control">
                                         <option value="" selected disabled>===== Pilih Departement =====</option>
                                         @foreach($departement as $data)
@@ -92,7 +92,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="departementAkhir">Departement Akhir</label>
+                                    <label for="departementAkhir">Departement Akhir</label> <br>
                                     <select name="departementAkhir" id="departementAkhir" class="form-control">
                                         <option value="" selected disabled>===== Pilih Departement =====</option>
                                         @foreach($departement as $data)
@@ -104,7 +104,7 @@
                             <!-- Divisi -->
                             <div class="row" id="divisiView" style="display: none;">
                                 <div class="col-md-6">
-                                    <label for="divisiAwal">Divisi Awal</label>
+                                    <label for="divisiAwal">Divisi Awal</label> <br>
                                     <select name="divisiAwal" id="divisiAwal" class="form-control">
                                         <option value="" selected disabled>===== Pilih Divisi =====</option>
                                         @foreach($divisi as $data)
@@ -113,7 +113,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="divisiAkhir">Divisi Akhir</label>
+                                    <label for="divisiAkhir">Divisi Akhir</label> <br>
                                     <select name="divisiAkhir" id="divisiAkhir" class="form-control">
                                         <option value="" selected disabled>===== Pilih Divisi =====</option>
                                         @foreach($divisi as $data)
@@ -124,52 +124,9 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-success float-end">Cari Data</button>
+                            <button type="submit" class="btn btn-success float-end">Cetak Laporan</button>
                         </div>
                     </form>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Data Absensi Karyawan</h3>
-
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <table id="example11" class="table table-bordered table-striped dataTable dtr-inline collapsed">
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Total Absensi</th>
-                    </tr>
-                    </thead>
-                    <?php
-                        $no = 1;
-                    ?>
-                    <tbody>
-                        @if(!isset($absensi))
-                        @else
-                        @foreach($absensi as $data)
-                            <tr>
-                                <td>{{ $no++ }}</td>
-                                <td>{{ $data->nama }}</td>
-                                <td>{{ $data->total_absen }}</td>
-                            </tr>
-                        @endforeach
-                        @endif
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Total Absensi</th>
-                        </tr>
-                    </tfoot>
-                    </table>
-                </div>
-                <!-- /.card-body -->
                 </div>
             </div>
         </div>
@@ -236,5 +193,10 @@
             }
         });
     });
+</script>
+<script>
+    @if (session('alert'))
+        swal({{ session('alert') }});
+    @endif
 </script>
 @stop

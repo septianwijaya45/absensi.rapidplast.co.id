@@ -126,7 +126,7 @@ class LaporanAbsensiController extends Controller
             //         GROUP BY p.pid
             //         ORDER BY afh.id DESC"
             //     );
-            // }else{
+            }else{
             //     $absensi = DB::select(
             //         "SELECT afh.*, p.*
             //         FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
@@ -134,15 +134,15 @@ class LaporanAbsensiController extends Controller
             //         GROUP BY p.pid
             //         ORDER BY afh.id DESC"
             //     );
+                return redirect()->back()->with('alert', 'Gagal Export Laporan Absensi! Harus Memilih Kategori!');
             }
         }else{
-            Session::put('sweetalert', 'error');
-            return redirect()->back()->with(['errors' => 'Gagal Export Laporan Absensi! Harus 1 Bulan!']);
+            return redirect()->back()->with('alert', 'Gagal Export Laporan Absensi! Harus 1 Bulan!');
         }
 
         $pdf = PDF::loadview('admin.laporanabsensi.cetak', [
-            'pegawai'   => $pegawai, 
-            'tanggal'   => $tanggal, 
+            'pegawai'   => $pegawai,
+            'tanggal'   => $tanggal,
             'tanggal2'  => $tanggal2,
             'dbName'    => $dbName
          ]);
