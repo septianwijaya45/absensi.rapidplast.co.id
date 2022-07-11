@@ -29,7 +29,7 @@ class AbsensiController extends Controller
             $tanggalCetak = Carbon::now()->format('Y-m-d');
             $year = Carbon::now()->format('Y');
             $month = Carbon::now()->format('m');
-            $dbName = $year.''.$month.'HISTORY';
+            $dbName = $year.''.$month.'history';
             
             if(!Schema::connection('mysql2')->hasTable($dbName)){
                 Schema::connection('mysql2')->create($dbName, function(Blueprint $table){
