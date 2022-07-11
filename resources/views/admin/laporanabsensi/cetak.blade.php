@@ -78,7 +78,7 @@ use Illuminate\Support\Facades\DB;
     $reguKerja = ReguKerja::where('kode', $data->regukerja_id)->first();
     $absensi = DB::select(
         "SELECT afh.*, p.*
-        FROM absensi_fingerprintskripsi.pegawais p, absensi_frhistory.$dbName afh
+        FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
         WHERE p.pid = afh.pid AND DATE(sync_date) >= '$tanggal' AND DATE(sync_date) <= '$tanggal2' AND afh.pid = '$data->pid'
         ORDER BY afh.sync_date ASC"
     );
