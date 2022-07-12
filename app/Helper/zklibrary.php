@@ -139,12 +139,12 @@ class ZKLibrary
 
     public function setTimeout($sec = 0, $usec = 0)
     {
-        if ($sec != 0) {
-            $this->timeout_sec = $sec;
-        }
-        if ($usec != 0) {
-            $this->timeout_usec = $usec;
-        }
+        // if ($sec != 0) {
+        //     $this->timeout_sec = $sec;
+        // }
+        // if ($usec != 0) {
+        //     $this->timeout_usec = $usec;
+        // }
         $timeout = array('sec' => $this->timeout_sec, 'usec' => $this->timeout_usec);
         socket_set_option($this->socket, SOL_SOCKET, SO_SNDTIMEO, $timeout);
     }
