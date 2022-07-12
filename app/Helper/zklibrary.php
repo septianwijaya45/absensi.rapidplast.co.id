@@ -145,7 +145,7 @@ class ZKLibrary
         // if ($usec != 0) {
         //     $this->timeout_usec = $usec;
         // }
-        $timeout = array('sec' => $this->timeout_sec, 'usec' => $this->timeout_usec);
+        $timeout = array('sec' => 5, 'usec' => 500000);
         socket_set_option($this->socket, SOL_SOCKET, SO_SNDTIMEO, $timeout);
     }
 
