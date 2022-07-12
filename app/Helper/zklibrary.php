@@ -137,7 +137,7 @@ class ZKLibrary
         }
     }
 
-    public function setTimeout($sec = 1, $usec = 500000)
+    public function setTimeout($sec = 0, $usec = 0)
     {
         if ($sec != 0) {
             $this->timeout_sec = $sec;
@@ -146,7 +146,7 @@ class ZKLibrary
             $this->timeout_usec = $usec;
         }
         $timeout = array('sec' => $this->timeout_sec, 'usec' => $this->timeout_usec);
-        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
+        socket_set_option($this->socket, SOL_SOCKET, SO_SNDTIMEO, $timeout);
     }
 
     public function ping($timeout = 1)
