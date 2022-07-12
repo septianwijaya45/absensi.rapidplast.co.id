@@ -30,7 +30,7 @@ class LaporanAbsensiController extends Controller
             if($checkMonth1 == $checkMonth2){
                 $year = date('Y', strtotime($tanggal));
                 $month = date('m', strtotime($tanggal));
-                $dbName = $year.''.$month.'history';
+                $dbName = $year.''.$month.'HISTORY';
                 
                 if(!is_null($request->nipAwal) && !is_null($request->nipAkhir)){
                     $absensi = DB::select(
