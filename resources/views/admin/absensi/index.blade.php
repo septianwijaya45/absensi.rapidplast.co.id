@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="col-md-2 text-center">
                                     <button type="button" id="sync-absensi" class="btn btn-warning mt-4">
-                                        Sync Absensi
+                                        Tarik Absensi
                                     </button>
                                 </div>
                                 <div class="col-md-2 text-center">

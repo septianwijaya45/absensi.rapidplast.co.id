@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Mesin;
 use Illuminate\Support\Facades\Session;
+use ZKLibrary;
 
 class MesinController extends Controller
 {
@@ -112,5 +113,15 @@ class MesinController extends Controller
         if(!empty($mesin)){
             Mesin::where('id', $id)->delete();
         }
+    }
+
+    function deleteDataMesin($id){
+        $mesin  = Mesin::where('id', $id)->first();
+        $port = 4370;
+
+        $zk = new ZKLibrary($mesin->tcpip, $port);
+        $zk->connect();
+        $zk->clearAttendance();
+        $zk->disconnect();
     }
 }

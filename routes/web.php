@@ -103,6 +103,8 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
              Route::post('/Update/{id}', [MesinController::class, 'update'])->name('updateMesin');
              // Delete Data
              Route::delete('/Delete/{id}', [MesinController::class, 'destroy'])->name('destroyMesin');
+             // Delete Data Mesin
+             Route::delete('/Delete-Data-Mesin/{id}', [MesinController::class, 'deleteDataMesin'])->name('deleteDataMesin');
         });
             
         // ========== Departement Route ========== //

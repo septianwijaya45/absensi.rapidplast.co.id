@@ -80,6 +80,7 @@
                                     <button class="btn btn-warning btn-sm">Ubah</button>
                                 </a>
                                 <button class="btn btn-danger btn-sm" onclick="destroy('{{$data->id}}')">Hapus</button>
+                                <button class="btn btn-dark btn-sm" onclick="deleteDataMesin('{{$data->id}}')">Hapus Data</button>
                             </td>
                         </tr>
                         @endforeach
@@ -171,6 +172,40 @@
                     });
             }else{
                 swal("Mesin Batal Dihapus", "", "info")
+            }
+        })
+    }
+</script>
+<script type="text/javascript">
+    function deleteDataMesin(id){
+        swal({
+            title: "Anda Yakin?",
+            text: "Untuk menghapus data pada mesin ini?",
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true
+        })
+        .then((willDelete) => {
+            if(willDelete) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                        url: "{{url('Admin/Mesin/Delete-Data-Mesin')}}/"+id,
+                        method: 'DELETE',
+                        success: function (results) {
+                            swal("Berhasil!", "Data Mesin Berhasil Dihapus!", "success");
+                            window.location.reload();
+                        },
+                        error: function (results) {
+                            console.log(results);
+                            swal("GAGAL!", "Gagal Menghapus Data Mesin!\n", "error");
+                        }
+                    });
+            }else{
+                swal("Data Mesin Batal Dihapus", "", "info")
             }
         })
     }

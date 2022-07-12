@@ -137,7 +137,7 @@ class ZKLibrary
         }
     }
 
-    public function setTimeout($sec = 0, $usec = 0)
+    public function setTimeout($sec = 1, $usec = 500000)
     {
         if ($sec != 0) {
             $this->timeout_sec = $sec;

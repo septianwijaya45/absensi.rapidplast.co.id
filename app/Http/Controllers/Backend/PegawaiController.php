@@ -139,8 +139,9 @@ class PegawaiController extends Controller
 
     function syncPegawai(){
         $mesin  = Mesin::where('is_default', 1)->first();
+        $port = 4370;
 
-        $zk = new ZKLibrary($mesin->tcpip, $mesin->port);
+        $zk = new ZKLibrary($mesin->tcpip, $port);
         $zk->connect();
         $pegawai = $zk->getUser();
 
