@@ -146,10 +146,10 @@ class ZKLibrary
             $this->timeout_usec = $usec;
         }
         
-        // $timeout = array('sec' => 5, 'usec' => 500000);
-        // socket_set_option($this->socket, SOL_SOCKET, SO_SNDTIMEO, $timeout);
-        $timeout = array('sec' => $this->timeout_sec, 'usec' => $this->timeout_usec);
-        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
+        $timeout = array('sec' => 5, 'usec' => 500000);
+        socket_set_option($this->socket, SOL_SOCKET, SO_SNDTIMEO, $timeout);
+        // $timeout = array('sec' => $this->timeout_sec, 'usec' => $this->timeout_usec);
+        // socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
     }
 
     public function ping($timeout = 1)
