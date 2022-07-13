@@ -38,34 +38,42 @@ class PegawaiController extends Controller
     }
 
     function store(Request $request){
+        // $this->validate($request, [
+        //     'nama'          => 'required',
+        //     'jabatan_id'    => 'required',
+        //     'no_ktp'        => 'required|unique:pegawais',
+        //     'departement'   => 'required',
+        //     'email'         => 'required|unique:users',
+        //     'sap'           => 'required',
+        //     'pid'           => 'required'
+        // ], [
+        //     'nama.required'         =>  'Nama Harus Diisi!',
+        //     'jabatan_id.required'   =>  'Jabatan Harus Diisi!',
+        //     'no_ktp.required'       =>  'Nomor KTP Harus Diisi!',
+        //     'no_ktp.unique'         =>  'Nomor KTP Harus Berbeda!',
+        //     'departement.required'  =>  'Departement Harus Diisi!',
+        //     'email.required'        =>  'Email Harus Diisi!',
+        //     'sap.required'          =>  'SAP Harus Diisi!',
+        //     'email.unique'          =>  'Email Harus Berbeda!',
+        //     'pid.required'          =>  'PID Harus Diisi!'
+        // ]);
+
         $this->validate($request, [
             'nama'          => 'required',
-            'jabatan_id'    => 'required',
-            'no_ktp'        => 'required|unique:pegawais',
-            'departement'   => 'required',
-            'email'         => 'required|unique:users',
-            'sap'           => 'required',
             'pid'           => 'required'
         ], [
             'nama.required'         =>  'Nama Harus Diisi!',
-            'jabatan_id.required'   =>  'Jabatan Harus Diisi!',
-            'no_ktp.required'       =>  'Nomor KTP Harus Diisi!',
-            'no_ktp.unique'         =>  'Nomor KTP Harus Berbeda!',
-            'departement.required'  =>  'Departement Harus Diisi!',
-            'email.required'        =>  'Email Harus Diisi!',
-            'sap.required'          =>  'SAP Harus Diisi!',
-            'email.unique'          =>  'Email Harus Berbeda!',
             'pid.required'          =>  'PID Harus Diisi!'
         ]);
 
-        $user               = new User();
-        $user->role_id      = 2;
-        $user->name         = $request->nama;
-        $user->email        = $request->email;
-        $user->password     = bcrypt('pegawai');
-        $user->created_at   = Carbon::now();
-        $user->updated_at   = Carbon::now();
-        $user->save();
+        // $user               = new User();
+        // $user->role_id      = 2;
+        // $user->name         = $request->nama;
+        // $user->email        = $request->email;
+        // $user->password     = bcrypt('pegawai');
+        // $user->created_at   = Carbon::now();
+        // $user->updated_at   = Carbon::now();
+        // $user->save();
 
         $pegawai = Pegawai::findOrCreate([
             'user_id'           => $user->id,
@@ -97,19 +105,20 @@ class PegawaiController extends Controller
     }
 
     function update(Request $request, $id){
-        $this->validate($request, [
-            'nama'          => 'required',
-            'email'         => 'required'
-        ], [
-            'nama.required'         =>  'Nama Harus Diisi!',
-            'email.required'        =>  'Email Harus Diisi!'
-        ]);
+        // $this->validate($request, [
+        //     'nama'          => 'required',
+        //     'email'         => 'required'
+        // ], [
+        //     'nama.required'         =>  'Nama Harus Diisi!',
+        //     'email.required'        =>  'Email Harus Diisi!'
+        // ]);
+        
         $pegawai = Pegawai::where('id', $id)->first();
 
-        User::where('id', $pegawai->user_id)->update([
-            'email'         => $request->email,
-            'updated_at'    => Carbon::now()
-        ]);
+        // User::where('id', $pegawai->user_id)->update([
+        //     'email'         => $request->email,
+        //     'updated_at'    => Carbon::now()
+        // ]);
 
         Pegawai::where('id', $id)->update([
             'jabatan_id'        => $request->jabatan_id,
@@ -132,7 +141,7 @@ class PegawaiController extends Controller
     function destroy($id){
         $pegawai = Pegawai::where('id', $id)->first();
         if(!empty($pegawai)){
-            User::where('id', $pegawai->user_id)->delete();
+            // User::where('id', $pegawai->user_id)->delete();
             Pegawai::where('id', $id)->delete();
         }
     }

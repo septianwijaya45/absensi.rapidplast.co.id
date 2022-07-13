@@ -139,14 +139,17 @@ class ZKLibrary
 
     public function setTimeout($sec = 0, $usec = 0)
     {
-        // if ($sec != 0) {
-        //     $this->timeout_sec = $sec;
-        // }
-        // if ($usec != 0) {
-        //     $this->timeout_usec = $usec;
-        // }
-        $timeout = array('sec' => 5, 'usec' => 500000);
-        socket_set_option($this->socket, SOL_SOCKET, SO_SNDTIMEO, $timeout);
+        if ($sec != 0) {
+            $this->timeout_sec = $sec;
+        }
+        if ($usec != 0) {
+            $this->timeout_usec = $usec;
+        }
+        
+        // $timeout = array('sec' => 5, 'usec' => 500000);
+        // socket_set_option($this->socket, SOL_SOCKET, SO_SNDTIMEO, $timeout);
+        $timeout = array('sec' => $this->timeout_sec, 'usec' => $this->timeout_usec);
+        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, $timeout);
     }
 
     public function ping($timeout = 1)
