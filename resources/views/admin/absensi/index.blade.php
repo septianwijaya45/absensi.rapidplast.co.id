@@ -37,7 +37,7 @@
                     <div class="card-header bg-primary">
                         <h3 class="card-title">Search Data</h3>
                     </div>
-                    <form action="{{route('syncDataAbsensi')}}" method="POST" enctype="multipart/form-data" id="form-data">
+                    <form action="{{route('searchAbsensi')}}" method="POST" enctype="multipart/form-data" id="form-data">
                         @csrf
                         <div class="card-body">
                             <div class="row">
