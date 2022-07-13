@@ -6,6 +6,7 @@ use App\Exports\AbsenMentahExport;
 use App\Exports\AbsenMentahExportSearch;
 use App\Http\Controllers\Controller;
 use App\Models\AbsenMentah;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Excel;
 use Illuminate\Support\Facades\DB;
@@ -22,52 +23,53 @@ class CetakAbsenMentahController extends Controller
     {
         $tanggal = date('Y-m-d', strtotime($tanggal));
         $absen = DB::connection('mysql2')->table($dbName)
-                ->select('pid', DB::raw("DATE_FORMAT(sync_date, '%d.%m.%Y%H:%i:%s') as sync_date"), 'check_in', 'check_out', 'sap')
+                ->select('pid', DB::raw("DATE_FORMAT(sync_date, '%d.%m.%Y%H:%i:%s') as sync_date"), 'check_in', 'check_out')
                 ->where(DB::raw('DATE(sync_date)'), $tanggal)
                 ->get();
 
                 $txt = "\tNO.IDTgl/Waktu\t  Status";
                 $txt .= "\r\n";
                 foreach($absen as $data){
+                    $sap = Pegawai::where('pid', $data->pid)->value('sap');
                     if(!empty($data->check_in)){
-                        if(strlen($data->sap) === 0){
-                            $txt .="\r\n        ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 1){
-                            $txt .="\r\n       ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 2){
-                            $txt .="\r\n      ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 3){
-                            $txt .="\r\n     ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 4){
-                            $txt .="\r\n    ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 5){
-                            $txt .="\r\n   ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 6){
-                            $txt .="\r\n  ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 7){
-                            $txt .="\r\n ".$data->sap.''.$data->sync_date.'P10';
+                        if(strlen($sap) === 0){
+                            $txt .="\r\n        ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 1){
+                            $txt .="\r\n       ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 2){
+                            $txt .="\r\n      ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 3){
+                            $txt .="\r\n     ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 4){
+                            $txt .="\r\n    ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 5){
+                            $txt .="\r\n   ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 6){
+                            $txt .="\r\n  ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 7){
+                            $txt .="\r\n ".$sap.''.$data->sync_date.'P10';
                         }else{
-                            $txt .="\r\n".$data->sap.''.$data->sync_date.'P10';
+                            $txt .="\r\n".$sap.''.$data->sync_date.'P10';
                         }
                     }else{
-                        if(strlen($data->sap) === 0){
-                            $txt .="\r\n        ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 1){
-                            $txt .="\r\n       ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 2){
-                            $txt .="\r\n      ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 3){
-                            $txt .="\r\n     ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 4){
-                            $txt .="\r\n    ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 5){
-                            $txt .="\r\n   ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 6){
-                            $txt .="\r\n  ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 7){
-                            $txt .="\r\n ".$data->sap.''.$data->sync_date.'P20';
+                        if(strlen($sap) === 0){
+                            $txt .="\r\n        ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 1){
+                            $txt .="\r\n       ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 2){
+                            $txt .="\r\n      ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 3){
+                            $txt .="\r\n     ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 4){
+                            $txt .="\r\n    ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 5){
+                            $txt .="\r\n   ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 6){
+                            $txt .="\r\n  ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 7){
+                            $txt .="\r\n ".$sap.''.$data->sync_date.'P20';
                         }else{
-                            $txt .="\r\n".$data->sap.''.$data->sync_date.'P20';
+                            $txt .="\r\n".$sap.''.$data->sync_date.'P20';
                         }
                     }
                 }
@@ -83,53 +85,54 @@ class CetakAbsenMentahController extends Controller
     {
 
         $absen = DB::connection('mysql2')->table($dbName)
-                ->select('pid', DB::raw("DATE_FORMAT(sync_date, '%d.%m.%Y%H:%i:%s') as sync_date"), 'check_in', 'check_out', 'sap')
-                ->whereDate(DB::raw('DATE(sync_date)'), '>=',$tanggal)   
-                ->whereDate(DB::raw('DATE(sync_date)'), '<=',$tanggal2)   
+                ->select('pid', DB::raw("DATE_FORMAT(sync_date, '%d.%m.%Y%H:%i:%s') as sync_date"), 'check_in', 'check_out')
+                ->whereDate(DB::raw('DATE(sync_date)'), '>=',$tanggal)
+                ->whereDate(DB::raw('DATE(sync_date)'), '<=',$tanggal2)
                 ->get();
 
                 $txt = "\tNO.IDTgl/Waktu\t  Status";
                 $txt .= "\r\n";
                 foreach($absen as $data){
+                    $sap = Pegawai::where('pid', $data->pid)->value('sap');
                     if(!empty($data->check_in)){
-                        if(strlen($data->sap) === 0){
-                            $txt .="\r\n        ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 1){
-                            $txt .="\r\n       ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 2){
-                            $txt .="\r\n      ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 3){
-                            $txt .="\r\n     ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 4){
-                            $txt .="\r\n    ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 5){
-                            $txt .="\r\n   ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 6){
-                            $txt .="\r\n  ".$data->sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($data->sap) == 7){
-                            $txt .="\r\n ".$data->sap.''.$data->sync_date.'P10';
+                        if(strlen($sap) === 0){
+                            $txt .="\r\n        ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 1){
+                            $txt .="\r\n       ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 2){
+                            $txt .="\r\n      ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 3){
+                            $txt .="\r\n     ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 4){
+                            $txt .="\r\n    ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 5){
+                            $txt .="\r\n   ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 6){
+                            $txt .="\r\n  ".$sap.''.$data->sync_date.'P10';
+                        }elseif(strlen($sap) == 7){
+                            $txt .="\r\n ".$sap.''.$data->sync_date.'P10';
                         }else{
-                            $txt .="\r\n".$data->sap.''.$data->sync_date.'P10';
+                            $txt .="\r\n".$sap.''.$data->sync_date.'P10';
                         }
                     }else{
-                        if(strlen($data->sap) === 0){
-                            $txt .="\r\n        ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 1){
-                            $txt .="\r\n       ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 2){
-                            $txt .="\r\n      ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 3){
-                            $txt .="\r\n     ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 4){
-                            $txt .="\r\n    ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 5){
-                            $txt .="\r\n   ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 6){
-                            $txt .="\r\n  ".$data->sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($data->sap) == 7){
-                            $txt .="\r\n ".$data->sap.''.$data->sync_date.'P20';
+                        if(strlen($sap) === 0){
+                            $txt .="\r\n        ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 1){
+                            $txt .="\r\n       ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 2){
+                            $txt .="\r\n      ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 3){
+                            $txt .="\r\n     ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 4){
+                            $txt .="\r\n    ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 5){
+                            $txt .="\r\n   ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 6){
+                            $txt .="\r\n  ".$sap.''.$data->sync_date.'P20';
+                        }elseif(strlen($sap) == 7){
+                            $txt .="\r\n ".$sap.''.$data->sync_date.'P20';
                         }else{
-                            $txt .="\r\n".$data->sap.''.$data->sync_date.'P20';
+                            $txt .="\r\n".$sap.''.$data->sync_date.'P20';
                         }
                     }
                 }

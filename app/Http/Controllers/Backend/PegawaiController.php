@@ -66,14 +66,14 @@ class PegawaiController extends Controller
             'pid.required'          =>  'PID Harus Diisi!'
         ]);
 
-        // $user               = new User();
-        // $user->role_id      = 2;
-        // $user->name         = $request->nama;
-        // $user->email        = $request->email;
-        // $user->password     = bcrypt('pegawai');
-        // $user->created_at   = Carbon::now();
-        // $user->updated_at   = Carbon::now();
-        // $user->save();
+        $user               = new User();
+        $user->role_id      = 2;
+        $user->name         = $request->nama;
+        $user->email        = $request->email;
+        $user->password     = bcrypt('pegawai');
+        $user->created_at   = Carbon::now();
+        $user->updated_at   = Carbon::now();
+        $user->save();
 
         $pegawai = Pegawai::findOrCreate([
             'user_id'           => $user->id,
@@ -133,6 +133,8 @@ class PegawaiController extends Controller
             'sap'               => $request->sap,
             'alamat'            => $request->alamat,
         ]);
+
+        // when data sap & pid update, changes pid & sap in frhistory
 
         Session::put('sweetalert', 'success');
         return redirect()->route('editPegawai', $id)->with('alert', 'Sukses Mengubah '.$pegawai->nama);
