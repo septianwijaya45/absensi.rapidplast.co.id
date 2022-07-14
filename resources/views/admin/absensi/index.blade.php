@@ -93,7 +93,7 @@
                         <th>No</th>
                         <th>NIP</th>
                         <th>Nama</th>
-                        <th>DEPT</th>
+                        <th>Tanggal Absen</th>
                         <th>Check In</th>
                         <th>Check Out</th>
                         <th>Telat</th>
@@ -115,7 +115,7 @@
                             <td>{{$no++}}</td>
                             <td>{{$data->pid}}</td>
                             <td>{{$data->nama}}</td>
-                            <td>{{$data->departement}}</td>
+                            <td>{{date('d F Y', strtotime($data->sync_date))}}</td>
                             <td>{{$data->check_in}}</td>
                             <td>{{$data->check_out}}</td>
                             <td>{{$data->telat}}</td>
@@ -134,7 +134,7 @@
                             <th>No</th>
                             <th>NIP</th>
                             <th>Nama</th>
-                            <th>DEPT</th>
+                            <th>Tanggal Absen</th>
                             <th>Check In</th>
                             <th>Check Out</th>
                             <th>Telat</th>

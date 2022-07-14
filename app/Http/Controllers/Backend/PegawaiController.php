@@ -112,13 +112,69 @@ class PegawaiController extends Controller
         //     'nama.required'         =>  'Nama Harus Diisi!',
         //     'email.required'        =>  'Email Harus Diisi!'
         // ]);
-        
+
+        // ***** GET MONTH NOW ***** //
+        $year = Carbon::now()->format('Y');
+        $month = Carbon::now()->format('m');
+
+        // ***** GET 5 MONTH BEFORE ***** //
+        $month4 = strtotime($month) + strtotime("-1 month");
+        $month4 = date('m', $month4);
+        $month3 = strtotime($month) + strtotime("-2 month");
+        $month3 = date('m', $month3);
+        $month2 = strtotime($month) + strtotime("-3 month");
+        $month2 = date('m', $month2);
+        $month1 = strtotime($month) + strtotime("-4 month");
+        $month1 = date('m', $month1);
+        $dbName = $year.''.$month.'HISTORY';
+        $dbName4 = $year.''.$month4.'HISTORY';
+        $dbName3 = $year.''.$month3.'HISTORY';
+        $dbName2 = $year.''.$month2.'HISTORY';
+        $dbName1 = $year.''.$month1.'HISTORY';
+
+        // ***** Variable for check if table is exist ***** //
+        $dbCheck4 = DB::connection('mysql2')->table($dbName4)->get();
+        $dbCheck3 = DB::connection('mysql2')->table($dbName2)->get();
+        $dbCheck2 = DB::connection('mysql2')->table($dbName3)->get();
+        $dbCheck1 = DB::connection('mysql2')->table($dbName1)->get();
+
         $pegawai = Pegawai::where('id', $id)->first();
 
         // User::where('id', $pegawai->user_id)->update([
         //     'email'         => $request->email,
         //     'updated_at'    => Carbon::now()
         // ]);
+
+        DB::connection('mysql2')->table($dbName)->where('pid', $pegawai->pid)->update([
+            'pid'   => $request->pid,
+            'sap'   => $request->sap
+        ]);
+
+        // ***** when data sap or pid update, changes pid or sap in frhistory ***** //
+        if(isset($dbCheck4)){
+            DB::connection('mysql2')->table($dbName4)->where('pid', $pegawai->pid)->update([
+                'pid'   => $request->pid,
+                'sap'   => $request->sap
+            ]);
+        }
+        if(isset($dbCheck3)){
+            DB::connection('mysql2')->table($dbName3)->where('pid', $pegawai->pid)->update([
+                'pid'   => $request->pid,
+                'sap'   => $request->sap
+            ]);
+        }
+        if(isset($dbCheck2)){
+            DB::connection('mysql2')->table($dbName2)->where('pid', $pegawai->pid)->update([
+                'pid'   => $request->pid,
+                'sap'   => $request->sap
+            ]);
+        }
+        if(isset($dbCheck1)){
+            DB::connection('mysql2')->table($dbName1)->where('pid', $pegawai->pid)->update([
+                'pid'   => $request->pid,
+                'sap'   => $request->sap
+            ]);
+        }
 
         Pegawai::where('id', $id)->update([
             'jabatan_id'        => $request->jabatan_id,
@@ -133,8 +189,6 @@ class PegawaiController extends Controller
             'sap'               => $request->sap,
             'alamat'            => $request->alamat,
         ]);
-
-        // when data sap & pid update, changes pid & sap in frhistory
 
         Session::put('sweetalert', 'success');
         return redirect()->route('editPegawai', $id)->with('alert', 'Sukses Mengubah '.$pegawai->nama);

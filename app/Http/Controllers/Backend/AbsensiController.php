@@ -53,7 +53,7 @@ class AbsensiController extends Controller
             // $absensi = Absen::all();
             $date = Carbon::now()->format('Y-m-d');
             $absensi = DB::select(
-                "SELECT afh.pid, p.nama, p.departement, afh.check_in, afh.check_out, afh.telat, afh.izin, afh.check_in1, afh.check_out1, afh.check_in2, afh.check_out2, afh.check_in3, afh.check_out3
+                "SELECT afh.pid, p.nama, p.departement, afh.check_in, afh.check_out, afh.telat, afh.izin, afh.check_in1, afh.check_out1, afh.check_in2, afh.check_out2, afh.check_in3, afh.check_out3, afh.sync_date
                 FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
                 WHERE p.pid = afh.pid AND DATE(afh.sync_date) = '$date'
                 ORDER BY afh.id DESC"
@@ -70,7 +70,7 @@ class AbsensiController extends Controller
             $tanggalCetak = date('Y-m-d', strtotime($request->tanggal));
             // $absensi = Absen::all();
             $absensi = DB::select(
-                "SELECT afh.pid, p.nama, p.departement, afh.check_in, afh.check_out, afh.telat, afh.izin, afh.check_in1, afh.check_out1, afh.check_in2, afh.check_out2, afh.check_in3, afh.check_out3
+                "SELECT afh.pid, p.nama, p.departement, afh.check_in, afh.check_out, afh.telat, afh.izin, afh.check_in1, afh.check_out1, afh.check_in2, afh.check_out2, afh.check_in3, afh.check_out3, afh.sync_date
                 FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
                 WHERE p.pid = afh.pid AND DATE(sync_date) >= '$tanggal' AND DATE(sync_date) <= '$tanggal2'
                 ORDER BY afh.id DESC"
