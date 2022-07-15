@@ -14,6 +14,7 @@ use App\Models\ReguKerja;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use ZKLibrary;
 
@@ -133,10 +134,11 @@ class PegawaiController extends Controller
         $dbName1 = $year.''.$month1.'HISTORY';
 
         // ***** Variable for check if table is exist ***** //
-        $dbCheck4 = DB::connection('mysql2')->table($dbName4)->get();
-        $dbCheck3 = DB::connection('mysql2')->table($dbName2)->get();
-        $dbCheck2 = DB::connection('mysql2')->table($dbName3)->get();
-        $dbCheck1 = DB::connection('mysql2')->table($dbName1)->get();
+        $dbCheck4 = Schema::connection('mysql2')->hasTable($dbName4);
+        $dbCheck3 = Schema::connection('mysql2')->hasTable($dbName3);
+        $dbCheck2 = Schema::connection('mysql2')->hasTable($dbName2);
+        $dbCheck1 = Schema::connection('mysql2')->hasTable($dbName1);
+
 
         $pegawai = Pegawai::where('id', $id)->first();
 
@@ -151,25 +153,25 @@ class PegawaiController extends Controller
         ]);
 
         // ***** when data sap or pid update, changes pid or sap in frhistory ***** //
-        if(isset($dbCheck4)){
+        if($dbCheck4 === true){
             DB::connection('mysql2')->table($dbName4)->where('pid', $pegawai->pid)->update([
                 'pid'   => $request->pid,
                 'sap'   => $request->sap
             ]);
         }
-        if(isset($dbCheck3)){
+        if($dbCheck3 === true){
             DB::connection('mysql2')->table($dbName3)->where('pid', $pegawai->pid)->update([
                 'pid'   => $request->pid,
                 'sap'   => $request->sap
             ]);
         }
-        if(isset($dbCheck2)){
+        if($dbCheck2 === true){
             DB::connection('mysql2')->table($dbName2)->where('pid', $pegawai->pid)->update([
                 'pid'   => $request->pid,
                 'sap'   => $request->sap
             ]);
         }
-        if(isset($dbCheck1)){
+        if($dbCheck1 === true){
             DB::connection('mysql2')->table($dbName1)->where('pid', $pegawai->pid)->update([
                 'pid'   => $request->pid,
                 'sap'   => $request->sap
