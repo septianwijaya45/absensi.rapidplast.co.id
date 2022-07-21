@@ -36,8 +36,11 @@
                 <div class="card">
                     <div class="card-header bg-primary">
                         <h3 class="card-title">Search Data</h3>
+                        <button type="button"  class="btn btn-sm btn-light float-right ml-2" style="border-radius: 50%;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <i class="fas fa-question"></i>
+                        </button>
                     </div>
-                    <form action="{{route('searchAbsensi')}}" method="POST" enctype="multipart/form-data" id="form-data">
+                    <form action="{{route('syncDataAbsensi')}}" method="POST" enctype="multipart/form-data" id="form-data">
                         @csrf
                         <div class="card-body">
                             <div class="row">
@@ -93,7 +96,7 @@
                         <th>No</th>
                         <th>NIP</th>
                         <th>Nama</th>
-                        <th>Tanggal Absen</th>
+                        <th>Tanggal</th>
                         <th>Check In</th>
                         <th>Check Out</th>
                         <th>Telat</th>
@@ -134,7 +137,7 @@
                             <th>No</th>
                             <th>NIP</th>
                             <th>Nama</th>
-                            <th>Tanggal Absen</th>
+                            <th>Tanggal</th>
                             <th>Check In</th>
                             <th>Check Out</th>
                             <th>Telat</th>
@@ -157,34 +160,42 @@
 </section>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Pilih Tanggal</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="{{ route('syncDataAbsensi') }}" method="POST" enctype="multipart/form-data">
-          @csrf
-          <div class="modal-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <label for="tanggal">Tanggal <span class="text-danger">* Harus Diisi</span></label>
-                    <input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ $date }}">
-
-                    @error('tanggal')
-                        <div class="is-invalid">
-                            {{  $message }}
-                        </div>
-                    @enderror
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Cara Tarik Data Pegawai dari Mesin</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div id="carouselExampleControls" class="carousel slide" data-interval="0" data-ride="carousel" data-bs-pause="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <p>Pastikan mesin "ON" secara default sesuai dengan data absensi yang ingin ditarik. Berikut tutorial cara cek apakah mesin "ON".</p>
+                        <img src="{{asset('public/tutorial/TarikPegawai1.gif')}}" class="d-block w-100">
+                    </div>
+                    <div class="carousel-item">
+                        <p>Jika tidak ada mesin "ON", klik button "OFF" pada kolom default. Ketika muncul pop up dengan text "Anda Yakin? Untuk Default Mesin Ini?", Klik "OK".</p>
+                        <img src="{{asset('public/tutorial/TarikPegawai2.gif')}}" class="d-block w-100">
+                    </div>
+                    <div class="carousel-item">
+                        <p>Setelah menyalakan mesin "ON", kembali ke halaman Data Absensi, lalu klik button "Tarik Absen". Tunggu beberapa saat, jika berhasil terdapat pop up berhasil dan halaman akan reload.</p>
+                        <img src="{{asset('public/tutorial/TarikAbsensi.gif')}}" class="d-block w-100">
+                    </div>
                 </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-primary">Sync Data</button>
-          </div>
-      </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Understood</button>
+        </div>
     </div>
   </div>
 </div>
@@ -193,7 +204,7 @@
 @section('footer')
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#sync-absensi').click(function(e){
+        $('#sync-absensi').on('click', function(e){
             e.preventDefault();
 
             let tanggal = $('#tanggal').val();
@@ -205,21 +216,26 @@
                 }
             })
 
-            $.ajax({
-                url     : "{{url('Admin/Absensi/Data-Synchronous-Absensi')}}",
-                method  : "POST",
-                data    : {tanggal:tanggal, tanggal2:tanggal2},
-                success : function(success){
-                    swal("Sukses!", "Berhasil Sync Data Absensi!", "success");
-                    setInterval(() => {
-                        window.location.reload();
-                    }, 2000);
-                },
-                error : function(error){
-                    console.log(error);
-                    swal("Gagal!", "Gagal Sync Data Absensi!\n Periksa Jaringan Anda!", "error");
-                }
-            });
+                    $.ajax({
+                        url     : "{{url('Admin/Absensi/Data-Synchronous-Absensi')}}",
+                        method  : "POST",
+                        data    : {tanggal:tanggal, tanggal2:tanggal2},
+                        success : function(success){
+                            console.log(success);
+                            if(success.errors){
+                                swal("GAGAL!", success.errors, "error")
+                            }else{
+                                swal("Sukses!", "Berhasil Sync Data Absensi!", "success");
+                                setInterval(() => {
+                                    window.location.reload();
+                                }, 2000);
+                            }
+                        },
+                        error : function(error){
+                            console.log(error);
+                            swal("Gagal!", "Gagal Sync Data Absensi!\n Periksa Jaringan Anda!", "error");
+                        }
+                    });
         })
     })
 </script>

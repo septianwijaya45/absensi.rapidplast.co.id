@@ -24,9 +24,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Total Pegawai</span>
-                    <span class="info-box-number">
-                    10
-                    </span>
+                    <span class="info-box-number">{{totPegawai()}}</span>
                 </div>
             </div>
         </div>
@@ -36,30 +34,56 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Total Mesin</span>
-                    <span class="info-box-number">41</span>
+                    <span class="info-box-number">{{totMesin()}}</span>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="info-box mb-3">
-                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-box"></i></span>
 
                 <div class="info-box-content">
                     <span class="info-box-text">Data Terbackup</span>
-                    <span class="info-box-number">2</span>
+                    <span class="info-box-number">{{totAbsenBackup()}}</span>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="info-box mb-3">
-                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-home"></i></span>
 
                 <div class="info-box-content">
-                    <span class="info-box-text">New Members</span>
-                    <span class="info-box-number">2,000</span>
+                    <span class="info-box-text">Absensi WFH</span>
+                    <span class="info-box-number">{{absensiWFH()}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header bg-primary">
+            <h3 class="card-title">Chart</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    {!! $bar->container() !!}
+                </div>
+                <div class="col-md-4">
+                    @if($checkIn !== 0 || $checkOut !== 0)
+                    {!! $pie->container() !!}
+                    @else
+                    <p class="text-danger">Tidak Ada Data</p>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 </section>
+@stop
+
+@section('footer')
+<script src="{{ $pie->cdn() }}"></script>
+{{ $pie->script() }}
+{{ $bar->script() }}
+<script src="{{ $bar->cdn() }}"></script>
 @stop

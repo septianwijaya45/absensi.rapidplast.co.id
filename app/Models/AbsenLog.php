@@ -10,10 +10,10 @@ class AbsenLog extends Model
     use HasFactory;
     
     protected $fillable = [
-        'pin', 
-        'date_time', 
-        'ver', 
-        'status_absen_id', 
-        'mesin_id'
+        'id',
+        'mesin_id',
+        'status_absen',
+        'created_at',
+        'updated_at'
     ];
 }

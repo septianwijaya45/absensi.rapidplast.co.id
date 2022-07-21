@@ -36,11 +36,12 @@
                 <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Data Pegawai</h3>
-                    <a href="{{route('syncPegawai')}}" class="text-decoration-none">
-                        <button type="button" class="btn btn-sm btn-primary float-right ml-2">
+                        <button type="button"  class="btn btn-sm btn-light float-right ml-2" style="border-radius: 50%;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <i class="fas fa-question"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary float-right ml-2" id="sync-pegawai">
                             Sync Pegawai
                         </button>
-                    </a>
                     <a href="{{route('addPegawai')}}" class="text-decoration-none">
                         <button type="button" class="btn btn-sm btn-success float-right">
                             Tambah Data
@@ -72,11 +73,14 @@ use App\Models\User;
                             $no = 1;
                         ?>
                         @foreach($pegawai as $data)
+                        <?php 
+                            $user = User::where('id', $data->user_id)->first(); 
+                        ?>
                         <tr>
                             <td>{{$no++}}</td>
                             <td>{{$data->pid}}</td>
                             <td>{{$data->nama}}</td>
-                            <td>{{$data->email}}</td>
+                            <td>{{$user != null ? $user->email : '-'}}</td>
                             <td>{{$data->no_ktp}}</td>
                             <td>{{$data->regukerja_id}}</td>
                             <td>{{$data->sap}}</td>
@@ -111,6 +115,47 @@ use App\Models\User;
         </div>
     </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Cara Tarik Data Pegawai dari Mesin</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div id="carouselExampleControls" class="carousel slide" data-interval="0" data-ride="carousel" data-bs-pause="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <p>Pastikan mesin "ON" secara default sesuai dengan data pegawai yang ingin ditarik. Berikut tutorial cara cek apakah mesin "ON".</p>
+                        <img src="{{asset('public/tutorial/TarikPegawai1.gif')}}" class="d-block w-100">
+                    </div>
+                    <div class="carousel-item">
+                        <p>Jika tidak ada mesin "ON", klik button "OFF" pada kolom default. Ketika muncul pop up dengan text "Anda Yakin? Untuk Default Mesin Ini?", Klik "OK".</p>
+                        <img src="{{asset('public/tutorial/TarikPegawai2.gif')}}" class="d-block w-100">
+                    </div>
+                    <div class="carousel-item">
+                        <p>Setelah menyalakan mesin "ON", kembali ke halaman Data Pegawai, lalu klik button "sync pegawai". Tunggu beberapa saat, jika berhasil terdapat pop up berhasil dan halaman akan reload.</p>
+                        <img src="{{asset('public/tutorial/TarikPegawai3.gif')}}" class="d-block w-100">
+                    </div>
+                </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Understood</button>
+        </div>
+    </div>
+  </div>
+</div>
 
 @stop
 
@@ -148,5 +193,33 @@ use App\Models\User;
             }
         })
     }
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#sync-pegawai').click(function(e){
+            e.preventDefault();
+
+            $.ajaxSetup({
+                headers : {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            })
+
+            $.ajax({
+                url     : "{{url('Admin/Pegawai/synchronous-pegawai')}}",
+                method  : "GET",
+                success : function(success){
+                    swal("Sukses!", "Berhasil Sync Data Pegawai!", "success");
+                    setInterval(() => {
+                        window.location.reload();
+                    }, 2000);
+                },
+                error : function(error){
+                    console.log(error);
+                    swal("Gagal!", "Gagal Sync Data Pegawai!\n Periksa Jaringan Anda!", "error");
+                }
+            });
+        })
+    })
 </script>
 @stop

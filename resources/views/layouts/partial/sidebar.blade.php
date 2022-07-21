@@ -125,7 +125,7 @@
             </a>
           </li> -->
           <li class="nav-item">
-            <a href="{{route('laporanAbsensi')}}" class="nav-link {{request()->is('Admin/Absensi-Work-From-Home') || request()->is('Admin/Absensi-Work-From-Home/*') ? 'active' : ''}}">
+            <a href="{{route('laporanAbsensi')}}" class="nav-link {{request()->is('Admin/Laporan-Absensi') || request()->is('Admin/Absensi-Work-From-Home/*') ? 'active' : ''}}">
               <i class="nav-icon fas fa-building"></i>
               <p>
                 Laporan Absensi

@@ -93,47 +93,19 @@ class LaporanAbsensiController extends Controller
                     FROM pegawais
                     where pid >= '$request->nipAwal' AND  pid <= '$request->nipAkhir'
                 ");
-            //     $absensi = DB::select(
-            //                 "SELECT afh.*, p.*
-            //                 FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
-            //                 WHERE p.pid = afh.pid AND DATE(sync_date) >= '$tanggal' AND DATE(sync_date) <= '$tanggal2' AND afh.pid >= '$request->nipAwal' AND afh.pid <= '$request->nipAkhir'
-            //                 GROUP BY p.pid
-            //                 ORDER BY afh.id DESC"
-            //             );
             }elseif(!is_null($request->departementAwal) && $request->departementAkhir){
                 $pegawai = DB::select("
                     SELECT pid, nama, departement_id, divisi_id, regukerja_id
                     FROM pegawais
                     where departement_id = '$request->departementAwal' AND divisi_id = '$request->departementAkhir'
                 ");
-            //     $absensi = DB::select(
-            //         "SELECT afh.*, p.*
-            //         FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
-            //         WHERE p.pid = afh.pid AND DATE(sync_date) >= '$tanggal' AND DATE(sync_date) <= '$tanggal2' AND p.departement_id = '$request->departementAwal' OR p.departement_id = '$request->departementAkhir'
-            //         GROUP BY p.pid
-            //         ORDER BY afh.id DESC"
-            //     );
             }elseif(!is_null($request->divisiAwal) && !is_null($request->divisiAkhir)){
                 $pegawai = DB::select("
                     SELECT pid, nama, departement_id, divisi_id, regukerja_id
                     FROM pegawais
                     where departement_id = '$request->divisiAwal' AND divisi_id = '$request->divisiAkhir'
                 ");
-            //     $absensi = DB::select(
-            //         "SELECT afh.*, p.*
-            //         FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
-            //         WHERE p.pid = afh.pid AND DATE(sync_date) >= '$tanggal' AND DATE(sync_date) <= '$tanggal2' AND p.divisi_id = '$request->divisiAwal' OR p.divisi_id = '$request->divisiAkhir'
-            //         GROUP BY p.pid
-            //         ORDER BY afh.id DESC"
-            //     );
             }else{
-            //     $absensi = DB::select(
-            //         "SELECT afh.*, p.*
-            //         FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
-            //         WHERE p.pid = afh.pid AND DATE(sync_date) >= '$tanggal' AND DATE(sync_date) <= '$tanggal2'
-            //         GROUP BY p.pid
-            //         ORDER BY afh.id DESC"
-            //     );
                 return redirect()->back()->with('alert', 'Gagal Export Laporan Absensi! Harus Memilih Kategori!');
             }
         }else{

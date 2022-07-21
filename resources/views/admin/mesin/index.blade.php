@@ -54,14 +54,23 @@
                         <th>TCPIP</th>
                         <th>SN</th>
                         <th>Default</th>
+                        <th>Log</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                        <?php 
+                        <?php
+
+use App\Models\AbsenLog;
+use Carbon\Carbon;
+
                             $no = 1;
                         ?>
                         @foreach($mesin as $data)
+                        <?php
+                            $tgl = Carbon::now()->format('d F Y');
+                            $log = AbsenLog::where('mesin_id', $data->id)->orderBy('id', 'DESC')->first();
+                        ?>
                         <tr>
                             <td>{{$no++}}</td>
                             <td>{{$data->name}}</td>
@@ -75,6 +84,19 @@
                                     <button class="btn btn-primary" onclick="defaultMesin('{{ $data->id }}')">On</button>
                                 @endif
                             </td>
+                            @if(!empty($log))
+                                @if(date('d F Y', strtotime($log->created_at)) == $tgl)
+                                    <td>{{$log->status_absen}} 
+                                        <span class="text-success">Tanggal {{date('d F Y', strtotime($log->created_at))}}</span>
+                                    </td>
+                                @else
+                                    <td>{{$log->status_absen}} 
+                                        <span class="text-danger">Tanggal {{date('d F Y', strtotime($log->created_at))}}</span>
+                                    </td>
+                                @endif
+                            @else
+                            <td class="text-danger">Tidak Ada Log</td>
+                            @endif
                             <td>
                                 <a href="{{ route('editMesin', $data->id) }}" class="text-decoration-none">
                                     <button class="btn btn-warning btn-sm">Ubah</button>
@@ -93,6 +115,7 @@
                             <th>TCPIP</th>
                             <th>SN</th>
                             <th>Default</th>
+                            <th>Log</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>

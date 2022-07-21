@@ -149,65 +149,69 @@ class AbsensiController extends Controller
                         if(!is_null($pegawai)){
                             // Check regukerja_id is not null
                             if(!empty($pegawai->regukerja_id) || $pegawai->regukerja_id != 'null' || $pegawai->regukerja_id != null){
-    
                                 $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
                                 if($reguKerja != null){
-                                    // Range date start and date request in machine
-                                    // $tglStart = strtotime($reguKerja->tgl_start);
-                                    // $tglReq = strtotime($row->date);
-                                    // $range = $tglReq - $tglStart;
-                                    // $range = $range / 60 /60 /24;
-                                    // $hari  = $range%$reguKerja->hari;
+                                    if($reguKerja->kode === 'Default' || $reguKerja->kode === 'DEFAULT'){
+                                        $clock = date('H:i:s', strtotime($row->date));
+                                        DB::connection('mysql2')->table($dbName)->insert([
+                                            'pid'       => $row->pid,
+                                            'sap'       => $pegawai->sap,
+                                            'absen1'    => $clock,
+                                            'telat'     => '00:00:00',
+                                            'sync_date'=>   $row->date,
+                                            'updated_at'=> Carbon::now()
+                                        ]);
+                                    }else{
 
-                                    $awal  = date_create($reguKerja->tgl_start);
-                                    $akhir = date_create($row->date); // waktu sekarang
-                                    $diff  = date_diff( $awal, $akhir );
-                                    $hari = $diff->days % $reguKerja->hari;
-                                    if($hari === 0){
-                                        $hari = $reguKerja->hari;
-                                    }
-            
-                                    // Get Jadwals
-                                    $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
-                                    // Get Ref Kerja
-                                    $refKerja = ReferensiKerja::where('kode', $jadwal[$hari])->first();
-                                    // Get Time in row
-                                    $clock = date('H:i:s', strtotime($row->date));
-                                    // Get Time - 1 hour before workin
-                                    $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
-                                    $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
-                                    // dd($clock >= $refKerja->workout && $clock >= $workOutBefore);
-                                    if($clock <= $refKerja->workout && $clock >= $workInBefore){
-                                        if($clock >= $refKerja->workin){                                // When Late Work in
-                                            $timeLate = strtotime($clock) - strtotime($refKerja->workin);
-                                            $late = date('H:i:s', $timeLate);
-                                            DB::connection('mysql2')->table($dbName)->insert([
+                                        $awal  = date_create($reguKerja->tgl_start);
+                                        $akhir = date_create($row->date); // waktu sekarang
+                                        $diff  = date_diff( $awal, $akhir );
+                                        $hari = $diff->days % $reguKerja->hari;
+                                        if($hari === 0){
+                                            $hari = $reguKerja->hari;
+                                        }
+                                        // Get Jadwals
+                                        $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
+                                        // Get Ref Kerja
+                                        $refKerja = ReferensiKerja::where('kode', $jadwal[$hari])->first();
+                                        // Get Time in row
+                                        $clock = date('H:i:s', strtotime($row->date));
+                                        // Get Time - 1 hour before workin
+                                        $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
+                                        $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
+                                        // dd($clock >= $refKerja->workout && $clock >= $workOutBefore);
+                                        if($clock <= $refKerja->workout && $clock >= $workInBefore){
+                                            if($clock >= $refKerja->workin){                                // When Late Work in
+                                                $timeLate = strtotime($clock) - strtotime($refKerja->workin);
+                                                $late = date('H:i:s', $timeLate);
+                                                DB::connection('mysql2')->table($dbName)->insert([
+                                                    'pid'       => $row->pid,
+                                                    'sap'       => $pegawai->sap,
+                                                    'check_in'  => $clock,
+                                                    'telat'     => $late,
+                                                    'sync_date'=>   $row->date,
+                                                    'updated_at'=> Carbon::now()
+                                                ]);
+                                            }else{                                                          // When Not Late
+                                                DB::connection('mysql2')->table($dbName)->insert([
+                                                    'pid'       => $row->pid,
+                                                    'sap'       => $pegawai->sap,
+                                                    'check_in'  => $clock,
+                                                    'telat'     => '00:00:00',
+                                                    'sync_date'=>   $row->date,
+                                                    'updated_at'=> Carbon::now()
+                                                ]);
+                                            }
+                                        }elseif($clock >= $refKerja->workout && $clock >= $workOutBefore){
+                                            DB::connection('mysql2')->table($dbName)->insert([ 
                                                 'pid'       => $row->pid,
                                                 'sap'       => $pegawai->sap,
-                                                'check_in'  => $clock,
-                                                'telat'     => $late,
-                                                'sync_date'=>   $row->date,
-                                                'updated_at'=> Carbon::now()
-                                            ]);
-                                        }else{                                                          // When Not Late
-                                            DB::connection('mysql2')->table($dbName)->insert([
-                                                'pid'       => $row->pid,
-                                                'sap'       => $pegawai->sap,
-                                                'check_in'  => $clock,
+                                                'check_out'  => $clock,
                                                 'telat'     => '00:00:00',
                                                 'sync_date'=>   $row->date,
                                                 'updated_at'=> Carbon::now()
                                             ]);
                                         }
-                                    }elseif($clock >= $refKerja->workout && $clock >= $workOutBefore){
-                                        DB::connection('mysql2')->table($dbName)->insert([ 
-                                            'pid'       => $row->pid,
-                                            'sap'       => $pegawai->sap,
-                                            'check_out'  => $clock,
-                                            'telat'     => '00:00:00',
-                                            'sync_date'=>   $row->date,
-                                            'updated_at'=> Carbon::now()
-                                        ]);
                                     }
                                 }
         
@@ -309,6 +313,18 @@ class AbsensiController extends Controller
                                             'sync_date'=>   $row->date,
                                             'updated_at'=> Carbon::now()
                                         ]);
+                                    }else{
+                                        DB::connection('mysql2')->table($dbName)->where([
+                                            ['pid', $row->pid],
+                                            [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
+                                        ])->update([
+                                            'pid'       => $row->pid,
+                                            'sap'       => $pegawai->sap,
+                                            'absen2'    => $clock,
+                                            'telat'     => '00:00:00',
+                                            'sync_date'=>   $row->date,
+                                            'updated_at'=> Carbon::now()
+                                        ]);
                                     }
                                 }
                             }
@@ -317,71 +333,17 @@ class AbsensiController extends Controller
                 }
             }
 
-            if(strtotime($tanggal) === strtotime($tanggal2)){
-                $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->delete();
-            }else{
-                $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->delete();
-            }
+            $absenMentah = DB::select("
+                DELETE FROM absen_mentahs
+            ");
 
-
-
-            // if(!is_null($absenMentah)){
-            //     foreach($absenMentah as $row){
-            //         if($row->status === 0){
-            //             $pegawai = Pegawai::where('pid', $row->pid)->first();
-            //             $checkPegawai = DB::connection('mysql2')->table($dbName)->where([
-            //                  ['pid', $row->pid],
-            //                  [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
-            //              ])->first();
-
-            //             if($checkPegawai === null || !empty($checkPegawai)){
-            //                 DB::connection('mysql2')->table($dbName)->insert([
-            //                     'pid'       => $row->pid,
-            //                     'sap'       => $pegawai->sap,
-            //                     'check_in'  => $row->date,
-            //                     'sync_date'=>   $row->date,
-            //                     'updated_at'=> Carbon::now()
-            //                 ]);
-            //             }
-            //         }elseif($row->status === 1){
-            //             $pegawai = Pegawai::where('pid', $row->pid)->value('sap');
-            //              $checkPegawai = DB::connection('mysql2')->table($dbName)->where([
-            //                  ['pid', $row->pid],
-            //                  [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
-            //              ])->first();
-                        
-            //              if(is_null($checkPegawai) || !$checkPegawai){
-            //                 DB::connection('mysql2')->table($dbName)->insert([
-            //                     'pid'       => $row->pid,
-            //                     'sap'       => $pegawai,
-            //                     'check_out'  => $row->date,
-            //                     'sync_date'=> $row->date,
-            //                     'updated_at'=> Carbon::now()
-            //                 ]);
-            //              }else{
-            //                  DB::connection('mysql2')->table($dbName)->where([
-            //                      ['pid', $row->pid],
-            //                      ['sync_date', $row->date] 
-            //                  ])->update([
-            //                     'check_out'  => $row->date,
-            //                     'updated_at'=> Carbon::now()
-            //                  ]);
-            //              }
-            //         }
-            //     }
-
-            //     if(Carbon::now()->format('Y-m-d') === $request->tanggal){
-            //         AbsenMentah::where(DB::raw('DATE(date)'), $request->tanggal)->delete();
-            //     }else{
-            //         AbsenMentah::where(DB::raw('DATE(created_at)'), $request->tanggal)->delete();
-            //     }
-    
-            //     Session::put('sweetalert', 'success');
-            //     return redirect()->route('absensi')->with('alert', 'Sukses Import Data Absensi Tertanggal '.$request->tanggal.' !');
-            // }else{
-            //     Session::put('sweetalert', 'error');
-            //     return redirect()->route('absensi')->with('alert', 'Gagal Import Data Absensi! Data Tidak Ada!');
-            // }
+            AbsenLog::insert([
+                'mesin_id'      => $mesin->id,
+                'status_absen'  => 'Tarik Absen',
+                'created_at'    => Carbon::now(),
+                'updated_at'    => Carbon::now()
+            ]);
+        
         }else{
             Session::put('sweetalert', 'error');
             return response()->json(['errors' => 'Gagal Import Data Absensi! Mungkin data sudah terhapus!']);
