@@ -40,7 +40,7 @@
                             <i class="fas fa-question"></i>
                         </button>
                     </div>
-                    <form action="{{route('syncDataAbsensi')}}" method="POST" enctype="multipart/form-data" id="form-data">
+                    <form action="{{route('searchAbsensi')}}" method="POST" enctype="multipart/form-data" id="form-data">
                         @csrf
                         <div class="card-body">
                             <div class="row">
