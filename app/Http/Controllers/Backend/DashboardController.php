@@ -160,8 +160,8 @@ class DashboardController extends Controller
                     ));
         }else{
             $checkIn4 = 0;
-            $checkOut = 0;
-            $telat5 = 0;
+            $checkOut4 = 0;
+            $telat4 = 0;
         }
 
 
