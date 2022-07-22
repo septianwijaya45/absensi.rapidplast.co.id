@@ -6,7 +6,10 @@ use App\Exports\AbsenMentahExport;
 use App\Exports\AbsenMentahExportSearch;
 use App\Http\Controllers\Controller;
 use App\Models\AbsenMentah;
+use App\Models\Jadwal;
 use App\Models\Pegawai;
+use App\Models\ReferensiKerja;
+use App\Models\ReguKerja;
 use Illuminate\Http\Request;
 use Excel;
 use Illuminate\Support\Facades\DB;
@@ -31,45 +34,68 @@ class CetakAbsenMentahController extends Controller
                 $txt .= "\r\n";
                 foreach($absen as $data){
                     $sap = Pegawai::where('pid', $data->pid)->value('sap');
-                    if(!empty($data->check_in)){
-                        if(strlen($sap) === 0){
-                            $txt .="\r\n        ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 1){
-                            $txt .="\r\n       ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 2){
-                            $txt .="\r\n      ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 3){
-                            $txt .="\r\n     ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 4){
-                            $txt .="\r\n    ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 5){
-                            $txt .="\r\n   ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 6){
-                            $txt .="\r\n  ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 7){
-                            $txt .="\r\n ".$sap.''.$data->sync_date.'P10';
-                        }else{
-                            $txt .="\r\n".$sap.''.$data->sync_date.'P10';
-                        }
-                    }else{
-                        if(strlen($sap) === 0){
-                            $txt .="\r\n        ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 1){
-                            $txt .="\r\n       ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 2){
-                            $txt .="\r\n      ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 3){
-                            $txt .="\r\n     ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 4){
-                            $txt .="\r\n    ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 5){
-                            $txt .="\r\n   ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 6){
-                            $txt .="\r\n  ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 7){
-                            $txt .="\r\n ".$sap.''.$data->sync_date.'P20';
-                        }else{
-                            $txt .="\r\n".$sap.''.$data->sync_date.'P20';
+                    $pegawai = Pegawai::where('pid', $data->pid)->first();
+                    if(!empty($data->sap) && $data->sap != 0){
+                        $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
+                        if(!empty($reguKerja)){
+                            $tglStart = strtotime($reguKerja->tgl_start);
+                            $tglReq = strtotime($data->sync_date);
+                            $range = $tglReq - $tglStart;
+                            $range = $range / 60 /60 /24;
+                            $hari  = $range%$reguKerja->hari;
+                            if($hari === 0){
+                                $hari = $reguKerja->hari;
+                            }
+        
+                            // Get Jadwals
+                            $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
+                            // Get Ref Kerja
+                            $refKerja = ReferensiKerja::where('kode', $jadwal[$hari])->first();
+                            $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
+                            $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
+        
+                            if($data->check_in <= $refKerja->workout && $data->check_in >= $workInBefore){
+                                if(strlen($sap) === 0){
+                                    $txt .="\r\n        ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 1){
+                                    $txt .="\r\n       ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 2){
+                                    $txt .="\r\n      ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 3){
+                                    $txt .="\r\n     ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 4){
+                                    $txt .="\r\n    ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 5){
+                                    $txt .="\r\n   ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 6){
+                                    $txt .="\r\n  ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 7){
+                                    $txt .="\r\n ".$sap.''.$data->sync_date.'P10';
+                                }else{
+                                    $txt .="\r\n".$sap.''.$data->sync_date.'P10';
+                                }
+                            }
+                            if($data->check_in >= $refKerja->workout && $data->check_in >= $workOutBefore){
+                                if(strlen($sap) === 0){
+                                    $txt .="\r\n        ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 1){
+                                    $txt .="\r\n       ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 2){
+                                    $txt .="\r\n      ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 3){
+                                    $txt .="\r\n     ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 4){
+                                    $txt .="\r\n    ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 5){
+                                    $txt .="\r\n   ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 6){
+                                    $txt .="\r\n  ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 7){
+                                    $txt .="\r\n ".$sap.''.$data->sync_date.'P20';
+                                }else{
+                                    $txt .="\r\n".$sap.''.$data->sync_date.'P20';
+                                }
+                            }
                         }
                     }
                 }
@@ -94,45 +120,68 @@ class CetakAbsenMentahController extends Controller
                 $txt .= "\r\n";
                 foreach($absen as $data){
                     $sap = Pegawai::where('pid', $data->pid)->value('sap');
-                    if(!empty($data->check_in)){
-                        if(strlen($sap) === 0){
-                            $txt .="\r\n        ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 1){
-                            $txt .="\r\n       ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 2){
-                            $txt .="\r\n      ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 3){
-                            $txt .="\r\n     ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 4){
-                            $txt .="\r\n    ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 5){
-                            $txt .="\r\n   ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 6){
-                            $txt .="\r\n  ".$sap.''.$data->sync_date.'P10';
-                        }elseif(strlen($sap) == 7){
-                            $txt .="\r\n ".$sap.''.$data->sync_date.'P10';
-                        }else{
-                            $txt .="\r\n".$sap.''.$data->sync_date.'P10';
-                        }
-                    }else{
-                        if(strlen($sap) === 0){
-                            $txt .="\r\n        ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 1){
-                            $txt .="\r\n       ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 2){
-                            $txt .="\r\n      ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 3){
-                            $txt .="\r\n     ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 4){
-                            $txt .="\r\n    ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 5){
-                            $txt .="\r\n   ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 6){
-                            $txt .="\r\n  ".$sap.''.$data->sync_date.'P20';
-                        }elseif(strlen($sap) == 7){
-                            $txt .="\r\n ".$sap.''.$data->sync_date.'P20';
-                        }else{
-                            $txt .="\r\n".$sap.''.$data->sync_date.'P20';
+                    if(!empty($sap) && $sap != 0){
+                        $pegawai = Pegawai::where('pid', $data->pid)->first();
+                        $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
+                        if(!empty($reguKerja)){
+                            $tglStart = strtotime($reguKerja->tgl_start);
+                            $tglReq = strtotime($data->sync_date);
+                            $range = $tglReq - $tglStart;
+                            $range = $range / 60 /60 /24;
+                            $hari  = $range%$reguKerja->hari;
+                            if($hari === 0){
+                                $hari = $reguKerja->hari;
+                            }
+        
+                            // Get Jadwals
+                            $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
+                            // Get Ref Kerja
+                            $refKerja = ReferensiKerja::where('kode', $jadwal[$hari])->first();
+                            $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
+                            $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
+        
+                            if($data->check_in <= $refKerja->workout && $data->check_in >= $workInBefore){
+                                if(strlen($sap) === 0){
+                                    $txt .="\r\n        ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 1){
+                                    $txt .="\r\n       ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 2){
+                                    $txt .="\r\n      ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 3){
+                                    $txt .="\r\n     ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 4){
+                                    $txt .="\r\n    ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 5){
+                                    $txt .="\r\n   ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 6){
+                                    $txt .="\r\n  ".$sap.''.$data->sync_date.'P10';
+                                }elseif(strlen($sap) == 7){
+                                    $txt .="\r\n ".$sap.''.$data->sync_date.'P10';
+                                }else{
+                                    $txt .="\r\n".$sap.''.$data->sync_date.'P10';
+                                }
+                            }
+                            if($data->check_in >= $refKerja->workout && $data->check_in >= $workOutBefore){
+                                if(strlen($sap) === 0){
+                                    $txt .="\r\n        ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 1){
+                                    $txt .="\r\n       ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 2){
+                                    $txt .="\r\n      ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 3){
+                                    $txt .="\r\n     ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 4){
+                                    $txt .="\r\n    ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 5){
+                                    $txt .="\r\n   ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 6){
+                                    $txt .="\r\n  ".$sap.''.$data->sync_date.'P20';
+                                }elseif(strlen($sap) == 7){
+                                    $txt .="\r\n ".$sap.''.$data->sync_date.'P20';
+                                }else{
+                                    $txt .="\r\n".$sap.''.$data->sync_date.'P20';
+                                }
+                            }
                         }
                     }
                 }
