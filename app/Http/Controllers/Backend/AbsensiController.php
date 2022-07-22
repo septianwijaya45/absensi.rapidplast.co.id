@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Absen;
+use App\Models\AbsenLog;
 use App\Models\AbsenMentah;
 use App\Models\HariKerja;
 use App\Models\Jadwal;
