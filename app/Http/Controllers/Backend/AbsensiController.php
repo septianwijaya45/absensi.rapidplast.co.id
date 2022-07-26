@@ -46,6 +46,8 @@ class AbsensiController extends Controller
                     $table->time('check_out2')->nullable();
                     $table->time('check_in3')->nullable();
                     $table->time('check_out3')->nullable();
+                    $table->time('absen1')->nullable();
+                    $table->time('absen2')->nullable();
                     $table->time('izin')->nullable();
                     $table->timestamp('sync_date')->nullable();
                     $table->timestamp('updated_at')->nullable();

@@ -35,7 +35,7 @@ class CetakAbsenMentahController extends Controller
                 foreach($absen as $data){
                     $sap = Pegawai::where('pid', $data->pid)->value('sap');
                     $pegawai = Pegawai::where('pid', $data->pid)->first();
-                    if(!empty($data->sap) && $data->sap != 0){
+                    if(!empty($sap) && $sap != 0){
                         $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
                         if(!empty($reguKerja)){
                             $tglStart = strtotime($reguKerja->tgl_start);
@@ -54,46 +54,46 @@ class CetakAbsenMentahController extends Controller
                             $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
                             $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
         
-                            if($data->check_in <= $refKerja->workout && $data->check_in >= $workInBefore){
+                            if($data->check_in >= $workInBefore && $data->check_in <= $refKerja->workout){
                                 if(strlen($sap) === 0){
-                                    $txt .="\r\n        ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n        ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 1){
-                                    $txt .="\r\n       ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n       ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 2){
-                                    $txt .="\r\n      ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n      ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 3){
-                                    $txt .="\r\n     ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n     ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 4){
-                                    $txt .="\r\n    ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n    ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 5){
-                                    $txt .="\r\n   ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n   ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 6){
-                                    $txt .="\r\n  ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n  ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 7){
-                                    $txt .="\r\n ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }else{
-                                    $txt .="\r\n".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }
                             }
-                            if($data->check_in >= $refKerja->workout && $data->check_in >= $workOutBefore){
+                            if($data->check_out >= $refKerja->workout && $data->check_out >= $workOutBefore){
                                 if(strlen($sap) === 0){
-                                    $txt .="\r\n        ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n        ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 1){
-                                    $txt .="\r\n       ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n       ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 2){
-                                    $txt .="\r\n      ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n      ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 3){
-                                    $txt .="\r\n     ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n     ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 4){
-                                    $txt .="\r\n    ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n    ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 5){
-                                    $txt .="\r\n   ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n   ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 6){
-                                    $txt .="\r\n  ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n  ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 7){
-                                    $txt .="\r\n ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }else{
-                                    $txt .="\r\n".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }
                             }
                         }
@@ -140,46 +140,46 @@ class CetakAbsenMentahController extends Controller
                             $workInBefore = date('H:i:s', (strtotime($refKerja->workin) - strtotime('01:00:00')));
                             $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
         
-                            if($data->check_in <= $refKerja->workout && $data->check_in >= $workInBefore){
+                            if($data->check_in >= $workInBefore && $data->check_in <= $refKerja->workout){
                                 if(strlen($sap) === 0){
-                                    $txt .="\r\n        ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n        ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 1){
-                                    $txt .="\r\n       ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n       ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 2){
-                                    $txt .="\r\n      ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n      ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 3){
-                                    $txt .="\r\n     ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n     ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 4){
-                                    $txt .="\r\n    ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n    ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 5){
-                                    $txt .="\r\n   ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n   ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 6){
-                                    $txt .="\r\n  ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n  ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }elseif(strlen($sap) == 7){
-                                    $txt .="\r\n ".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }else{
-                                    $txt .="\r\n".$sap.''.$data->sync_date.'P10';
+                                    $txt .="\r\n".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_in.'P10';
                                 }
                             }
-                            if($data->check_in >= $refKerja->workout && $data->check_in >= $workOutBefore){
+                            if($data->check_out >= $refKerja->workout && $data->check_out >= $workOutBefore){
                                 if(strlen($sap) === 0){
-                                    $txt .="\r\n        ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n        ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 1){
-                                    $txt .="\r\n       ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n       ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 2){
-                                    $txt .="\r\n      ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n      ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 3){
-                                    $txt .="\r\n     ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n     ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 4){
-                                    $txt .="\r\n    ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n    ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 5){
-                                    $txt .="\r\n   ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n   ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 6){
-                                    $txt .="\r\n  ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n  ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }elseif(strlen($sap) == 7){
-                                    $txt .="\r\n ".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n ".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }else{
-                                    $txt .="\r\n".$sap.''.$data->sync_date.'P20';
+                                    $txt .="\r\n".$sap.''.date('d.m.Y', strtotime($data->sync_date)).''.$data->check_out.'P20';
                                 }
                             }
                         }
