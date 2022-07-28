@@ -122,6 +122,7 @@ class AbsensiController extends Controller
             }else{
                 $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
             }
+            
 
             if(!is_null($absenMentah)){
                 foreach($absenMentah as $row){
@@ -234,9 +235,9 @@ class AbsensiController extends Controller
                                 $workOutBefore = date('H:i:s', (strtotime($refKerja->workout) - strtotime('01:00:00')));
                                 $checkAbsen = DB::connection('mysql2')->table($dbName)->where([
                                     ['pid', $row->pid],
-                                    [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
+                                    [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))]
                                 ])->first();
-    
+
                                 if(!empty($checkAbsen->check_in) && $clock >= $refKerja->workout && $clock >= $workOutBefore){
                                     DB::connection('mysql2')->table($dbName)->where([
                                         ['pid', $row->pid],
@@ -288,6 +289,15 @@ class AbsensiController extends Controller
                                         [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
                                     ])->update([
                                         'check_in3'  => $clock,
+                                        'sync_date'=>   $row->date,
+                                        'updated_at'=> Carbon::now()
+                                    ]);
+                                }elseif(!empty($checkAbsen->check_out) && $clock <= $refKerja->workout && $clock >= $workInBefore){
+                                    $test = DB::connection('mysql2')->table($dbName)->where([
+                                        ['pid', $row->pid],
+                                        [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))] 
+                                    ])->update([
+                                        'check_in'  => $clock,
                                         'sync_date'=>   $row->date,
                                         'updated_at'=> Carbon::now()
                                     ]);
