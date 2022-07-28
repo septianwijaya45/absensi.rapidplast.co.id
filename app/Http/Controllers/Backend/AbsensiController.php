@@ -125,26 +125,13 @@ class AbsensiController extends Controller
 
             if(!is_null($absenMentah)){
                 foreach($absenMentah as $row){
-                    // $checkPegawai = DB::connection('mysql2')->table($dbName)->where([
-                    //     ['pid', $row->pid],
-                    //     [DB::raw('DATE(sync_date)'), ''.date('Y-m-d', strtotime($row->date).'')]
-                    // ])->get();
-
                     $checkDate = date('Y-m-d', strtotime($row->date));
 
-                    if(strtotime($tanggal) === strtotime($tanggal2)){
-                        $checkPegawai = DB::select("
-                            SELECT db.* 
-                            FROM absensi_frhistory.$dbName db
-                            WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
-                        ");
-                    }else{
-                        $checkPegawai = DB::select("
-                            SELECT db.* 
-                            FROM absensi_frhistory.$dbName db
-                            WHERE db.pid = '$row->pid' AND DATE(db.sync_date) BETWEEN '$tanggal' AND '$tanggal2'
-                        ");
-                    }
+                    $checkPegawai = DB::select("
+                        SELECT db.* 
+                        FROM absensi_frhistory.$dbName db
+                        WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
+                    ");
 
 
                     if($checkPegawai === null || empty($checkPegawai)){
@@ -165,7 +152,6 @@ class AbsensiController extends Controller
                                             'updated_at'=> Carbon::now()
                                         ]);
                                     }else{
-
                                         $awal  = date_create($reguKerja->tgl_start);
                                         $akhir = date_create($row->date); // waktu sekarang
                                         $diff  = date_diff( $awal, $akhir );
@@ -217,7 +203,6 @@ class AbsensiController extends Controller
                                         }
                                     }
                                 }
-        
                             }
                         }
 
@@ -227,7 +212,7 @@ class AbsensiController extends Controller
                         if(!is_null($pegawai)){
                             if(!empty($pegawai->regukerja_id) || $pegawai->regukerja_id != 'null' || $pegawai->regukerja_id != null){
                                 $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
-                                
+
                                 // Range date start and date request in machine
                                 $tglStart = strtotime($reguKerja->tgl_start);
                                 $tglReq = strtotime($row->date);
@@ -335,10 +320,6 @@ class AbsensiController extends Controller
                     }
                 }
             }
-
-            $absenMentah = DB::select("
-                DELETE FROM absen_mentahs
-            ");
 
             AbsenLog::insert([
                 'mesin_id'      => $mesin->id,
