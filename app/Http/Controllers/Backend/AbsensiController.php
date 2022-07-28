@@ -331,6 +331,10 @@ class AbsensiController extends Controller
                 }
             }
 
+            $absenMentah = DB::select("
+                DELETE FROM absen_mentahs
+            ");
+
             AbsenLog::insert([
                 'mesin_id'      => $mesin->id,
                 'status_absen'  => 'Tarik Absen',
